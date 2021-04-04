@@ -107,7 +107,6 @@ cursor.execute('create table if not exists after_market_earnings (company varcha
 # ----- EARNINGS SENTIMENT -----
 
 
-
     
 # ----- INSIDER TRADING -----
 # *****************************************************************************
