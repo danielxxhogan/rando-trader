@@ -131,13 +131,13 @@ for i in range(0, len(tickers), 200):
             ohlc_df['CDLUPSIDEGAP2CROWS'] = ta.CDLUPSIDEGAP2CROWS(ohlc_df['open'], ohlc_df['high'], ohlc_df['low'], ohlc_df['close'])
             ohlc_df['CDLXSIDEGAP3METHODS'] = ta.CDLXSIDEGAP3METHODS(ohlc_df['open'], ohlc_df['high'], ohlc_df['low'], ohlc_df['close'])
             
-            if ohlc_df['atr_pct'].iloc[-1] < .03:
+            if ohlc_df['atr_pct'].iloc[-1] < .05:
                 pass
             
             elif ohlc_df['close'].iloc[-1] < 4.0:
                 pass
             
-            elif ohlc_df['volume'].iloc[-1] < 1000000:
+            elif ohlc_df['volume'].iloc[-1] < 400000:
                 pass
             
             else:
