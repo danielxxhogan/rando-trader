@@ -20,7 +20,7 @@ cursor.execute('delete from after_market_earnings')
 # *****************************************************************************
 earnings = pd.read_html('https://www.marketwatch.com/tools/earningscalendar?mod=side_nav')
 
-WEEKEND_DAYS = 2
+WEEKEND_DAYS = 0
 START_INDEX = 5 + WEEKEND_DAYS
 
 day_of_week = dt.datetime.today().weekday()
