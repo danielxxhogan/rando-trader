@@ -1,0 +1,14 @@
+{
+  "name": "express-server",
+  "version": "1.0.0",
+  "description": "api connecting dashboard with rds",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Daniel Hogan",
+  "license": "ISC",
+  "dependencies": {
+    "pg": "^8.5.1"
+  }
+}
