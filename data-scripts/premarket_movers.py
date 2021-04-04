@@ -83,7 +83,7 @@ conn.commit()
     
     
 
-# BENZINGA PREMARKET MOVERS
+# MARKETWATCH PREMARKET MOVERS
 # *****************************************************************************
 
 
