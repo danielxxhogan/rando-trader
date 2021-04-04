@@ -137,6 +137,12 @@ cursor.execute('create table if not exists premarket_losers (ticker varchar, \
                                                              change varchar, \
                                                              volume varchar)')
 
+cursor.execute('create table if not exists most_active (ticker varchar, \
+                                                        company varchar, \
+                                                        price varchar, \
+                                                        change varchar, \
+                                                        volume varchar)')
+
 
 
 
