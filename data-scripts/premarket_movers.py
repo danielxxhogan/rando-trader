@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import psycopg2
+import pandas as pd
 
 from config import *
 
@@ -15,7 +16,8 @@ cursor = conn.cursor()
 cursor.execute('delete from premarket_gainers')
 cursor.execute('delete from premarket_losers')
 
-# BENZINGA PREMARKET MOVERS
+
+# BENZINGA PREMARKET MOVERS USING BS4
 # *****************************************************************************
 r = requests.get(url='https://www.benzinga.com/premarket/')
 
@@ -26,6 +28,7 @@ tables = soup.find_all('table')
 gainers = tables[5]
 losers = tables[6]
 
+# *****************************************************************************
 gainer_rows = gainers.find_all('tr')
 
 for row in gainer_rows:
@@ -42,7 +45,7 @@ for row in gainer_rows:
                         values (%s, %s, %s, %s, %s)',
                         (ticker, company, price, change, volume))
 
-
+# *****************************************************************************
 loser_rows = losers.find_all('tr')
 
 for row in loser_rows:
@@ -63,11 +66,10 @@ for row in loser_rows:
 conn.commit()
 
 
-
+# BENZINGA PREMARKET MOVERS USING READ_HTML
+# *****************************************************************************
 # tickers = []
 
-
-# # ----- PREMARKET MOVERS -----
 # premarket = pd.read_html('https://www.benzinga.com/premarket/')
 
 # gainers = premarket[5]
@@ -79,15 +81,27 @@ conn.commit()
 # for stock in losers['Stock']:
 #     tickers.append(stock)
     
-    
-    
-    
 
 # MARKETWATCH PREMARKET MOVERS
 # *****************************************************************************
+# data = pd.read_html('https://www.marketwatch.com/tools/screener/premarket?mod=side_nav')
+# gainers = data[0]
+# losers = data[1]
+
+# for gainer in gainers.values:
+    
+#     cursor.execute('insert into premarket_gainers (ticker, company, price, change, volume) \
+#                     values (%s, %s, %s, %s, %s)',
+#                     (gainer[0].split()[0], gainer[1], gainer[2], gainer[5], gainer[3]))
+        
+# for loser in losers.values:
+    
+#     cursor.execute('insert into premarket_losers (ticker, company, price, change, volume) \
+#                     values (%s, %s, %s, %s, %s)',
+#                     (loser[0].split()[0], loser[1], loser[2], loser[5], loser[3]))
 
 
-
+# *****************************************************************************
 conn.commit()
 
 cursor.close()
