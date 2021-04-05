@@ -20,7 +20,7 @@ conn = psycopg2.connect(user=PG_USER,
 
 cursor = conn.cursor()
 
-one_month_ago = (dt.datetime.today() - dt.timedelta(days=30)).strftime('%Y-%m-%d')
+# one_month_ago = (dt.datetime.today() - dt.timedelta(days=30)).strftime('%Y-%m-%d')
 
 
 # EMPY AND RESET
@@ -35,16 +35,16 @@ r = requests.get(QUIVER_URL + '/live/congresstrading', headers=headers)
 congress_trading = r.json()
 
 for filing in congress_trading:
-    if filing['ReportDate'] > one_month_ago:
-        cursor.execute('insert into congress (amount, house, report_date, representative, ticker, transaction, transaction_date) \
-                        values(%s, %s, %s, %s, %s, %s, %s)',
-                        (filing['Amount'],
-                        filing['House'],
-                        filing['ReportDate'],
-                        filing['Representative'],
-                        filing['Ticker'],
-                        filing['Transaction'],
-                        filing['TransactionDate']))
+    # if filing['ReportDate'] > one_month_ago:
+    cursor.execute('insert into congress (amount, house, report_date, representative, ticker, transaction, transaction_date) \
+                    values(%s, %s, %s, %s, %s, %s, %s)',
+                    (filing['Amount'],
+                    filing['House'],
+                    filing['ReportDate'],
+                    filing['Representative'],
+                    filing['Ticker'],
+                    filing['Transaction'],
+                    filing['TransactionDate']))
 
 conn.commit()
 
@@ -55,15 +55,15 @@ r = requests.get(QUIVER_URL + '/live/senatetrading', headers=headers)
 senate_trading = r.json()
 
 for filing in senate_trading:
-    if filing['Date'] > one_month_ago:
-        cursor.execute('insert into senate (amount, date, party, senator, ticker, transaction) \
-                        values(%s, %s, %s, %s, %s, %s)',
-                        (filing['Amount'],
-                        filing['Date'],
-                        filing['Party'],
-                        filing['Senator'],
-                        filing['Ticker'],
-                        filing['Transaction']))
+    # if filing['Date'] > one_month_ago:
+    cursor.execute('insert into senate (amount, date, party, senator, ticker, transaction) \
+                    values(%s, %s, %s, %s, %s, %s)',
+                    (filing['Amount'],
+                    filing['Date'],
+                    filing['Party'],
+                    filing['Senator'],
+                    filing['Ticker'],
+                    filing['Transaction']))
 
 conn.commit()
 
@@ -74,14 +74,14 @@ r = requests.get(QUIVER_URL + '/live/housetrading', headers=headers)
 house_trading = r.json()
 
 for filing in house_trading:
-    if filing['Date'] > one_month_ago:
-        cursor.execute('insert into house (amount, date, representative, ticker, transaction) \
-                        values(%s, %s, %s, %s, %s)',
-                        (filing['Amount'],
-                        filing['Date'],
-                        filing['Representative'],
-                        filing['Ticker'],
-                        filing['Transaction']))
+    # if filing['Date'] > one_month_ago:
+    cursor.execute('insert into house (amount, date, representative, ticker, transaction) \
+                    values(%s, %s, %s, %s, %s)',
+                    (filing['Amount'],
+                    filing['Date'],
+                    filing['Representative'],
+                    filing['Ticker'],
+                    filing['Transaction']))
 
 conn.commit()
 
@@ -92,14 +92,14 @@ r = requests.get(QUIVER_URL + '/live/govcontractsall', headers=headers)
 government_contracts = r.json()
 
 for filing in government_contracts:
-    if filing['Date'] > one_month_ago:
-        cursor.execute('insert into contracts (agency, amount, date, description, ticker) \
-                        values(%s, %s, %s, %s, %s)',
-                        (filing['Agency'],
-                        filing['Amount'],
-                        filing['Date'][:10],
-                        filing['Description'],
-                        filing['Ticker']))
+    # if filing['Date'] > one_month_ago:
+    cursor.execute('insert into contracts (agency, amount, date, description, ticker) \
+                    values(%s, %s, %s, %s, %s)',
+                    (filing['Agency'],
+                    filing['Amount'],
+                    filing['Date'][:10],
+                    filing['Description'],
+                    filing['Ticker']))
 
 conn.commit()
 
@@ -110,15 +110,15 @@ r = requests.get(QUIVER_URL + '/live/lobbying', headers=headers)
 corporate_lobbying = r.json()
 
 for filing in corporate_lobbying:
-    if filing['Date'] > one_month_ago:
-        cursor.execute('insert into lobbying (amount, client, date, issue, specific_issue, ticker) \
-                        values(%s, %s, %s, %s, %s, %s)',
-                        (filing['Amount'],
-                        filing['Client'],
-                        filing['Date'],
-                        filing['Issue'],
-                        filing['Specific_Issue'],
-                        filing['Ticker']))
+    # if filing['Date'] > one_month_ago:
+    cursor.execute('insert into lobbying (amount, client, date, issue, specific_issue, ticker) \
+                    values(%s, %s, %s, %s, %s, %s)',
+                    (filing['Amount'],
+                    filing['Client'],
+                    filing['Date'],
+                    filing['Issue'],
+                    filing['Specific_Issue'],
+                    filing['Ticker']))
 
 conn.commit()
 

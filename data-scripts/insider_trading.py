@@ -43,7 +43,7 @@ def add_new(x=0):
         float(latest_in_db[9]) == float(row[9]) and
         latest_in_db[10] == row[10] and
         float(latest_in_db[11]) == float(row[11][1:].replace(',', '').replace('$', ''))):
-        
+
         return
 
     else:
