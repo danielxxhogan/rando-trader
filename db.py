@@ -110,7 +110,8 @@ cursor.execute('create table if not exists after_market_earnings (company varcha
     
 # ----- INSIDER TRADING -----
 # *****************************************************************************
-cursor.execute('create table if not exists insider_trading (filing_date date, \
+cursor.execute('create table if not exists insider_trading (it_id serial primary key, \
+                                                            filing_date date, \
                                                             trade_date date, \
                                                             ticker varchar, \
                                                             company varchar, \
