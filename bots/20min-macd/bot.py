@@ -53,7 +53,6 @@ def create_df(ticker):
 
 # ****************************************************************************************************************
 def calculate_qty(df):
-    print('here')
     close = df['close'].iloc[-1]
     amt_to_spend = buying_power / max_trades
     qty = math.floor(amt_to_spend / close)
@@ -110,6 +109,7 @@ def main():
     
     for ticker in tickers:
         print(f'\n{ticker}')
+        logging.error(f'/n{ticker}')
         
         try:
             l_s = get_position_details(positions, ticker)

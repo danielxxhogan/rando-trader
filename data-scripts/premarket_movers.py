@@ -28,13 +28,12 @@ tables = soup.find_all('table')
 gainers = tables[5]
 losers = tables[6]
 
-# *****************************************************************************
 gainer_rows = gainers.find_all('tr')
 
 for row in gainer_rows:
     tds = row.find_all('td')
+    
     if len(tds) > 0:
-        
         ticker = tds[0].text.replace('\n', '').replace(' ', '')
         company = tds[1].text.replace('\n', '').replace(' ', '')
         price = tds[2].text.replace('\n', '').replace(' ', '')
@@ -45,13 +44,12 @@ for row in gainer_rows:
                         values (%s, %s, %s, %s, %s)',
                         (ticker, company, price, change, volume))
 
-# *****************************************************************************
 loser_rows = losers.find_all('tr')
 
 for row in loser_rows:
     tds = row.find_all('td')
+    
     if len(tds) > 0:
-        
         ticker = tds[0].text.replace('\n', '').replace(' ', '')
         company = tds[1].text.replace('\n', '').replace(' ', '')
         price = tds[2].text.replace('\n', '').replace(' ', '')
@@ -106,5 +104,3 @@ conn.commit()
 
 cursor.close()
 conn.close()
-
-

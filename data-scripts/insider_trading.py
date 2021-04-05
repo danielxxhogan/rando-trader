@@ -30,22 +30,21 @@ def add_new(x=0):
         return
     
     row = current_it.values[x]
-    
-    if len(insider_trading) > 0:
 
-        if (latest_in_db[1].strftime('%Y-%m-%d') == row[0][:10] and
-            latest_in_db[2].strftime('%Y-%m-%d') == row[1] and
-            latest_in_db[3] == row[2] and
-            latest_in_db[4] == row[3] and
-            latest_in_db[5] == row[4] and
-            latest_in_db[6] == row[5] and
-            float(latest_in_db[7]) == float(row[7][1:]) and
-            float(latest_in_db[8]) == float(row[8][1:].replace(',', '')) and
-            float(latest_in_db[9]) == float(row[9]) and
-            latest_in_db[10] == row[10] and
-            float(latest_in_db[11]) == float(row[11][1:].replace(',', '').replace('$', ''))):
-            
-            return
+    if (len(insider_trading) > 0 and
+        latest_in_db[1].strftime('%Y-%m-%d') == row[0][:10] and
+        latest_in_db[2].strftime('%Y-%m-%d') == row[1] and
+        latest_in_db[3] == row[2] and
+        latest_in_db[4] == row[3] and
+        latest_in_db[5] == row[4] and
+        latest_in_db[6] == row[5] and
+        float(latest_in_db[7]) == float(row[7][1:]) and
+        float(latest_in_db[8]) == float(row[8][1:].replace(',', '')) and
+        float(latest_in_db[9]) == float(row[9]) and
+        latest_in_db[10] == row[10] and
+        float(latest_in_db[11]) == float(row[11][1:].replace(',', '').replace('$', ''))):
+        
+        return
 
     else:
         add_new(x+1)
