@@ -32,9 +32,9 @@ losers = cursor.fetchall()
 buying_power = 80000
 max_trades = len(gainers) + len(losers)
 
-# ****************************************************************************************************************
+# *****************************************************************************
 def calculate_qty(bars):
-    close = bars[row[0]][-1].c
+    close = bars[-1].c
     amt_to_spend = buying_power / max_trades
     qty = math.floor(amt_to_spend / close)
     
@@ -44,12 +44,13 @@ def calculate_qty(bars):
     return qty
 
 
+# *****************************************************************************
 for row in gainers:
     print(f'\n{row[0]} was a top gainer\n')
     logging.error(f'\n{row[0]} was a top gainer\n')
     
     try:
-        bars = api.get_barset(symbols=row[0], timeframe='minute', limit=30)
+        bars = api.get_barset(symbols=row[0], timeframe='minute', limit=30)[row[0]]
 
         api.submit_order(symbol=row[0],
                       qty=calculate_qty(bars),
@@ -58,8 +59,10 @@ for row in gainers:
                       time_in_force='gtc',
                       )
         
-        print(f'\nNew short position initiated for {row[0]}\n***************************************\n')
-        logging.error(f'\nNew short position initiated for {row[0]}\n***************************************\n')
+        print(f'\nNew short position initiated for {row[0]} \
+              \n***************************************\n')
+        logging.error(f'\nNew short position initiated for {row[0]} \
+                      \n***************************************\n')
         
     except:
         print(f'error encountered... skipping {row[0]}')
@@ -70,7 +73,7 @@ for row in losers:
     logging.error(f'\n{row[0]} was a top loser')
     
     try:
-        bars = api.get_barset(symbols=row[0], timeframe='minute', limit=30)
+        bars = api.get_barset(symbols=row[0], timeframe='minute', limit=30)[row[0]]
         
         api.submit_order(symbol=row[0],
                       qty=calculate_qty(bars),
@@ -79,18 +82,11 @@ for row in losers:
                       time_in_force='gtc',
                       )
         
-        print(f'\nNew long position initiated for {row[0]} \n***************************************\n')
-        logging.error(f'\nNew long position initiated for {row[0]} \n***************************************\n')
+        print(f'\nNew long position initiated for {row[0]} \
+              \n***************************************\n')
+        logging.error(f'\nNew long position initiated for {row[0]} \
+                      \n***************************************\n')
         
     except:
         print(f'error encountered... skipping {row[0]}')
         logging.error(f'error encountered... skipping {row[0]}')
-        
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
