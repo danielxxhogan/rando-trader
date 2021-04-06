@@ -245,10 +245,12 @@ def main():
             if l_s != '':
                 print('\n', ticker, l_s)
                 logging.error(f'\n--- {ticker} {l_s} ---')
+                
             df = create_df(ticker)
             if l_s != '':
                 print(df.tail())
                 logging.error(f'\n{df.tail()}')
+                
             signal = trade_signal(ticker, df, l_s, entry_price)
             if l_s != '' or signal != '':
                 print(f'signal: {signal}')
@@ -262,8 +264,10 @@ def main():
                                  limit_price=calculate_price(ticker, signal),
                                  time_in_force='gtc',
                                  )
-                print(f'\nNew long position initiated for {ticker} \n***************************************\n')
-                logging.error(f'\nNew long position initiated for {ticker} \n***************************************\n')
+                print(f'\nNew long position initiated for {ticker} \
+                      \n***************************************\n')
+                logging.error(f'\nNew long position initiated for {ticker} \
+                              \n***************************************\n')
             
             elif signal == "sell" and len(positions) < max_trades:
                 api.submit_order(symbol=ticker,
@@ -273,13 +277,17 @@ def main():
                                  limit_price=calculate_price(ticker, signal),
              				     time_in_force='gtc',
              				     )
-                print(f'\nNew short position initiated for {ticker}\n***************************************\n')
-                logging.error(f'\nNew short position initiated for {ticker}\n***************************************\n')
+                print(f'\nNew short position initiated for {ticker} \
+                      \n***************************************\n')
+                logging.error(f'\nNew short position initiated for {ticker} \
+                              \n***************************************\n')
                 
             elif signal == 'close':
                 api.close_position(symbol=ticker)
-                print(f'\nAll positions closed for {ticker} \n***************************************\n')
-                logging.error(f'\nAll positions closed for {ticker} \n***************************************\n')
+                print(f'\nAll positions closed for {ticker} \
+                      \n***************************************\n')
+                logging.error(f'\nAll positions closed for {ticker} \
+                              \n***************************************\n')
                 
         except:
             print(f'error encountered... skipping {ticker}')
