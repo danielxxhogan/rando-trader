@@ -1,11 +1,12 @@
 const Pool = require('pg').Pool;
+require('dotenv').config()
 
 const pool = new Pool({
-  user: 'postgres',
-  password: 'COLExBURNED#363',
-  host: 'database-2.c7stlrulp8px.us-east-1.rds.amazonaws.com',
-  port: 5432,
-  database: 'sk'
+  user: PG_USER,
+  password: PG_PASSWORD,
+  host: PG_HOST,
+  port: PG_PORT,
+  database: PG_DATABASE
 });
 
 // const testing_db = async () => {
