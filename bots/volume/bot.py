@@ -14,7 +14,7 @@ from config import *
 
 logging.basicConfig(filename='volume.log', filemode='w', level=logging.ERROR)
 
-buying_power = 150000
+buying_power = 800000
 max_trades = 10
 
 api = tradeapi.REST(ALPACA_API_KEY, ALPACA_SECRET_KEY, PAPER_URL, api_version='v2')
@@ -138,8 +138,8 @@ def calculate_stop(ticker, current_price, max_dd, l_s):
 def trade_signal(ticker, df, l_s, entry_price=0.0):
     signal = ''
     v_multiplier = 1.0
-    take_profit_pct = 0.10
-    stop_loss_pct = 0.05
+    take_profit_pct = 0.15
+    stop_loss_pct = 0.03
     atr = atrs[ticker]
     max_dd = stop_loss_pct*atr
     current_price = df['close'].iloc[-1]
@@ -212,6 +212,7 @@ def calculate_qty(df):
     qty = math.floor(amt_to_spend / close)
     print(f'quantity: {qty}')
     logging.error(f'quantity: {qty}')
+    
     return qty
 
 
