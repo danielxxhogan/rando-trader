@@ -36,7 +36,6 @@ for ticker in tickers:
     
 positions_taken = []
 
-
 # CALCULATE OPENING RANGES
 # *****************************************************************************
 opening_ranges = {}
@@ -142,7 +141,6 @@ def trade_signal(ticker, l_s):
             last_bar.c > stop_price):
             
             signal = 'close'
-        
             
     return signal
 
@@ -210,13 +208,6 @@ def main():
         except:
             print(f'error encountered... skipping {ticker}')
             logging.error(f'error encountered... skipping {ticker}')
-    
-    
-    
-    
-
-
-
 
 
 # START
@@ -266,23 +257,3 @@ for order in orders:
 api.close_all_positions()
 print("all positions closed")
 logging.error('all positions closed')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
