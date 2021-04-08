@@ -1,9 +1,25 @@
+from selenium import webdriver
+from google.cloud import language_v1
+import psycopg2
 import requests
-import pandas as pd
 import datetime as dt
+import os
 
 from config import *
 
+
+conn = psycopg2.connect(user=PG_USER,
+                 password=PG_PASSWORD,
+                 host=PG_HOST,
+                 port=PG_PORT,
+                 dbname=PG_DATABASE,
+                 )
+
+cursor = conn.cursor()
+
+client = language_v1.LanguageServiceClient()
+
+browser = webdriver.Chrome()
 
 # This script will execute toward the end of the trading day. It will get all
 # companies reporting earnings after market from the db.
@@ -20,62 +36,94 @@ from config import *
 
 
 # GET ALL STOCKS REPORTING AFTER MARKET
+browser.get('https://www.benzinga.com/news/earnings')
+earnings = browser.find_element_by_class_name('ag-center-cols-container').text.split('\n')
+browser.quit()
 
-
-# GET NEWS FOR EACH STOCK, CALCULATE CURRENT ARTICLES, CURRENT SENTIMENT, AND OVERALL SENTIMENT
-
+for i in range(0, len(earnings), 11):
+    if earnings[i+2] == 'PM':
+        try:
+            ticker = earnings[i+3]
+            print(f'ticker: {ticker}\n\n')
+    
+            # GET NEWS FOR EACH STOCK, CALCULATE CURRENT ARTICLES, CURRENT SENTIMENT, AND OVERALL SENTIMENT
+    
+            # r = requests.get(f'https://api.polygon.io/v1/meta/symbols/{ticker}/news?apiKey={POLYGON_API_KEY}')
+            # articles = r.json()
+            
+            r = requests.get(f'https://www.alphavantage.co/query?function=OVERVIEW&symbol={ticker}&apikey={ALPHA_VANTAGE_API_KEY}')
+            company_name = r.json()['Name']
+            
+            r = requests.get(f'https://newsapi.org/v2/everything?q={company_name}&apiKey={NEWS_API_KEY}')
+            articles = r.json()['articles']
+            
+            articles_today = 0
+            
+            total_magnitude = 0.0
+            total_sentiment = 0.0
+            magnitude_scores = []
+            sentiment_scores = []
+            
+            today_total_magnitude = 0.0
+            today_total_sentiment = 0.0
+            today_magnitude_scores = []
+            today_sentiment_scores = []
+            
+            for article in articles:
+                try:
+                    if ticker == 'DLPN':
+                        print(article)
+                        
+                    article_string = article['title'] + ' ' + article['description'] + ' ' + article['content']
+                    document = language_v1.Document(content=article_string, type_=language_v1.Document.Type.PLAIN_TEXT)
+                    sentiment = client.analyze_sentiment(request={'document': document}).document_sentiment
+        
+                    if article['publishedAt'][:10] == dt.datetime.today().strftime('%Y-%m-%d'):
+                        articles_today += 1
+                        
+                        today_total_magnitude += sentiment.magnitude
+                        today_magnitude_scores.append(sentiment.magnitude)
+                        today_sentiment_scores.append(sentiment.score)
+                    
+                    else:
+                        total_magnitude += sentiment.magnitude
+                        magnitude_scores.append(sentiment.magnitude)
+                        sentiment_scores.append(sentiment.score)
+                        
+                except:
+                    pass
+                    
+            for i in range(len(today_sentiment_scores)):
+                magnitude = today_magnitude_scores[i] / today_total_magnitude
+                sentiment = today_sentiment_scores[i] * magnitude
+                today_total_sentiment += sentiment
+                
+            total_magnitude += today_total_magnitude
+            magnitude_scores += today_magnitude_scores
+            sentiment_scores += today_sentiment_scores
+            
+            for i in range(len(sentiment_scores)):
+                magnitude = magnitude_scores[i] / total_magnitude
+                sentiment = sentiment_scores[i] * magnitude
+                total_sentiment += sentiment
+                
+            print(f'articles today: {articles_today}\n \
+                    todays sentiment: {today_total_sentiment}\n \
+                    overall sentiment: {total_sentiment}\n\n')
+                    
+            r = requests.get(f'https://api.stocktwits.com/api/2/streams/symbol/{ticker}.json')
+            messages = r.json()['messages']
+                    
+        except:
+            pass
+                
+        
+        
 
 # GET STOCKTWITS DATA, CALCULATE CURRENT MENTIONS, CURRENT SENTIMENT, AND OVERALL SENTIMENT
 
 
 # GET STOCKTWITS SENTIMENT AND CHANGE IN MENTIONS
-
-
-
-
-
-# GET NEWS FOR A GIVEN STOCK AND STORE IN DF
-# *****************************************************************************
-r = requests.get(f'https://api.polygon.io/v1/meta/symbols/AAPL/news?apiKey={POLYGON_API_KEY}')
-r = r.json()
-
-symbol = []
-timestamp = []
-title = []
-url = []
-source = []
-summary = []
-image = []
-
-for row in r:
-    symbol.append(row['symbols'][0])
-    timestamp.append(row['timestamp'][:10])
-    title.append(row['title'])
-    url.append(row['url'])
-    source.append(row['source'])
-    summary.append(row['summary'])
-    image.append(row['image'])
-    
-df = pd.DataFrame()
-df['symbol'] = symbol
-df['timestamp'] = timestamp
-df['title'] = title
-df['url'] = url
-df['source'] = source
-df['summary'] = summary
-df['image'] = image
-
-two_days_ago = dt.datetime.today() - dt.timedelta(days=2)
-
-
-
-
-
-
-
-
-
-
 
 
 
