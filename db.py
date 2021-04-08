@@ -82,8 +82,6 @@ cursor.execute('create table if not exists heavily_traded (ticker varchar, \
 
 # ----- EARNINGS -----
 # *****************************************************************************
-
-# ----- MARKETWATCH EARNINGS -----
 cursor.execute('create table if not exists morning_earnings (date date, \
                                                              ticker varchar, \
                                                              estimate decimal, \
@@ -96,12 +94,16 @@ cursor.execute('create table if not exists after_market_earnings (date date, \
                                                              actual decimal, \
                                                              surprise decimal)')
     
-# ----- BENZINGA EARNINGS -----
-
-
 
 # ----- EARNINGS SENTIMENT -----
-
+cursor.execute('create table if not exists earnings_sentiment (date date, \
+                                                               ticker varchar, \
+                                                               articles integer, \
+                                                               sentiment_today decimal, \
+                                                               overall_sentiment decimal, \
+                                                               messages integer, \
+                                                               st_sentiment_today decimal, \
+                                                               st_overall_sentiment decimal)')
 
     
 # ----- INSIDER TRADING -----
@@ -139,10 +141,6 @@ cursor.execute('create table if not exists most_active (ticker varchar, \
                                                         price varchar, \
                                                         change varchar, \
                                                         volume varchar)')
-
-
-
-
 
 
 conn.commit()
