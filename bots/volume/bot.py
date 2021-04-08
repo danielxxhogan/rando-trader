@@ -1,13 +1,9 @@
 import alpaca_trade_api as tradeapi
 import psycopg2
-import talib as ta
 import pandas as pd
-import time
 import math
 import requests
 import numpy as np
-import statsmodels.api as sm
-import json
 import logging
 
 from config import *
@@ -63,24 +59,6 @@ def get_position_details(positions, ticker):
                 entry_price = float(position['avg_entry_price'])
                
     return l_s, entry_price
-
-
-# ****************************************************************************************************************
-def slope(series, n):
-    series = (series - series.min()) / (series.max() - series.min())
-    x = np.array(range(len(series)))
-    x = (x - x.min()) / (x.max() - x.min())
-    slopes = [i*0 for i in range(n-1)]
-    for i in range(n, len(series) + 1):
-        y_scaled = series[i - n:i]
-        x_scaled = x[i - n:i]
-        x_scaled = sm.add_constant(x_scaled)
-        model = sm.OLS(y_scaled, x_scaled)
-        results = model.fit()
-        slopes.append(results.params[-1])
-    slope_angle = (np.rad2deg(np.arctan(np.array(slopes))))
-    
-    return np.array(slope_angle)
   
 
 # ****************************************************************************************************************

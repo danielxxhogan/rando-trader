@@ -37,6 +37,7 @@ for ticker in tickers:
     
 positions_taken = []
 
+
 # CALCULATE OPENING RANGES
 # *****************************************************************************
 opening_ranges = {}
