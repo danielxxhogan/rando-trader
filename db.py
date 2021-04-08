@@ -84,21 +84,17 @@ cursor.execute('create table if not exists heavily_traded (ticker varchar, \
 # *****************************************************************************
 
 # ----- MARKETWATCH EARNINGS -----
-cursor.execute('create table if not exists morning_earnings (company varchar, \
-                                                             symbol varchar, \
-                                                             quarter varchar, \
+cursor.execute('create table if not exists morning_earnings (date date, \
+                                                             ticker varchar, \
                                                              estimate decimal, \
                                                              actual decimal, \
-                                                             actual_surprise decimal, \
-                                                             surprise_pct decimal)')
+                                                             surprise decimal)')
     
-cursor.execute('create table if not exists after_market_earnings (company varchar, \
-                                                                  symbol varchar, \
-                                                                  quarter varchar, \
-                                                                  estimate decimal, \
-                                                                  actual decimal, \
-                                                                  actual_surprise decimal, \
-                                                                  surprise_pct decimal)')
+cursor.execute('create table if not exists after_market_earnings (date date, \
+                                                             ticker varchar, \
+                                                             estimate decimal, \
+                                                             actual decimal, \
+                                                             surprise decimal)')
     
 # ----- BENZINGA EARNINGS -----
 
