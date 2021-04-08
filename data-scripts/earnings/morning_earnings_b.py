@@ -1,6 +1,6 @@
-import requests
 from selenium import webdriver
 import psycopg2
+import datetime as dt
 
 from config import *
 
@@ -21,11 +21,15 @@ browser.quit()
 for i in range(0, len(earnings), 11):
     if earnings[i+2] == 'AM' and earnings[i+6] != '-' and earnings[i+7] != '-':
         print(earnings[i+3])
-
-
-        # here ill add the values to the db if theyve reported earnings and have
-        # an estimate.
-
+        
+        date = dt.datetime.today().strftime('%Y-%m-%d')
+        
+        cursor.execute('insert into morning_earnings (date, ticker, estimate, actual, surprise) \
+                        values (%s, %s, %s, %s, %s)',
+                        (date, earnings[i+3],
+                         float(earnings[i+6][1:]),
+                         float(earnings[i+7][1:]),
+                         float(earnings[i+8][:-1])*100))
 
 
 conn.commit()
