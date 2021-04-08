@@ -1,4 +1,3 @@
-import requests
 from selenium import webdriver
 import psycopg2
 
@@ -19,7 +18,7 @@ earnings = browser.find_element_by_class_name('ag-center-cols-container').text.s
 browser.quit()
 
 for i in range(0, len(earnings), 11):
-    if earnings[i+2] == 'AM' and earnings[i+6] != '-' and earnings[i+7] != '-':
+    if earnings[i+2] == 'PM' and earnings[i+6] != '-' and earnings[i+7] != '-':
         print(earnings[i+3])
 
 
