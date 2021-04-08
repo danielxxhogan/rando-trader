@@ -3,7 +3,6 @@ from google.cloud import language_v1
 import psycopg2
 import requests
 import datetime as dt
-import os
 
 from config import *
 
@@ -48,10 +47,6 @@ for i in range(0, len(earnings), 11):
     
             # GET NEWS FOR EACH STOCK, CALCULATE CURRENT ARTICLES, CURRENT SENTIMENT, AND OVERALL SENTIMENT
             # *********************************************************************************************
-            
-            # r = requests.get(f'https://api.polygon.io/v1/meta/symbols/{ticker}/news?apiKey={POLYGON_API_KEY}')
-            # articles = r.json()
-            
             r = requests.get(f'https://www.alphavantage.co/query?function=OVERVIEW&symbol={ticker}&apikey={ALPHA_VANTAGE_API_KEY}')
             company_name = r.json()['Name']
             
@@ -72,9 +67,6 @@ for i in range(0, len(earnings), 11):
             
             for article in articles:
                 try:
-                    if ticker == 'DLPN':
-                        print(article)
-                        
                     article_string = article['title'] + ' ' + article['description'] + ' ' + article['content']
                     document = language_v1.Document(content=article_string, type_=language_v1.Document.Type.PLAIN_TEXT)
                     sentiment = client.analyze_sentiment(request={'document': document}).document_sentiment
@@ -170,24 +162,30 @@ for i in range(0, len(earnings), 11):
                     todays sentiment: {today_total_sentiment_st}\n \
                     overall sentiment: {total_sentiment_st}\n\n')
                     
+            date = dt.datetime.today().strftime('%Y-%m-%d')
+                    
+            cursor.execute('insert into earnings_sentiment (date, ticker, \
+                            articles, sentiment_today, overall_sentiment, \
+                            messages, st_sentiment_today, st_overall_sentiment) \
+                            values (%s, %s, %s, %s, %s, %s, %s, %s)',
+                            (date, ticker, articles_today, today_total_sentiment,
+                             total_sentiment, messages_today, today_total_sentiment_st,
+                             total_sentiment_st))
+                    
+
+            # GET STOCKTWITS SENTIMENT AND CHANGE IN MENTIONS
+            
+            # browser = webdriver.Chrome()
+            # browser.get(f'https://stocktwits.com/symbol/{ticker}')
+            # time.sleep(10)
+            # st_data = browser.find_element_by_xpath('/html/body/div[3]/div/div/div[3]/div[2]/div/div[1]/div[1]/div/div[2]/div/div/div[1]/div/div/div[2]/div/div[1]')
+            # browser.quit()
+
         except:
-            pass
-                
-        
-        
-
-# GET STOCKTWITS DATA, CALCULATE CURRENT MENTIONS, CURRENT SENTIMENT, AND OVERALL SENTIMENT
+            print(f'error encountered... skipping {ticker}')
 
 
-# GET STOCKTWITS SENTIMENT AND CHANGE IN MENTIONS
+conn.commit()
 
-
-
-
-
-
-
-
-
-
-
+cursor.close()
+conn.close()
