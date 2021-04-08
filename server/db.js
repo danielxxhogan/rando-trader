@@ -9,23 +9,4 @@ const pool = new Pool({
   database: PG_DATABASE
 });
 
-// const testing_db = async () => {
-//   try {
-//     const results = await pool.query(
-//       'select products.name, description, price, images.name as image, categories.name as category \
-//        from products \
-//        join images \
-//        on products.product_id = images.product_id \
-//        join categories \
-//        on products.category_id = categories.category_id'
-//       );
-  
-//       console.log(results);
-//   } catch (err) {
-//     console.log(err);
-//   };
-// };
-
-// testing_db();
-
 module.exports = pool;
