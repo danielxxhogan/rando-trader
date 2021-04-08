@@ -47,7 +47,8 @@ for i in range(0, len(earnings), 11):
             print(f'ticker: {ticker}\n\n')
     
             # GET NEWS FOR EACH STOCK, CALCULATE CURRENT ARTICLES, CURRENT SENTIMENT, AND OVERALL SENTIMENT
-    
+            # *********************************************************************************************
+            
             # r = requests.get(f'https://api.polygon.io/v1/meta/symbols/{ticker}/news?apiKey={POLYGON_API_KEY}')
             # articles = r.json()
             
@@ -111,8 +112,63 @@ for i in range(0, len(earnings), 11):
                     todays sentiment: {today_total_sentiment}\n \
                     overall sentiment: {total_sentiment}\n\n')
                     
+                    
+            # GET STOCKTWITS DATA FOR EACH STOCK, CALCULATE CURRENT MESSAGES, CURRENT SENTIMENT, AND OVERALL SENTIMENT
+            # ********************************************************************************************************
+            
             r = requests.get(f'https://api.stocktwits.com/api/2/streams/symbol/{ticker}.json')
             messages = r.json()['messages']
+            
+            messages_today = 0
+            
+            total_magnitude = 0.0
+            total_sentiment_st = 0.0
+            magnitude_scores = []
+            sentiment_scores = []
+            
+            today_total_magnitude = 0.0
+            today_total_sentiment_st = 0.0
+            today_magnitude_scores = []
+            today_sentiment_scores = []
+            
+            for message in messages:
+                try:
+                    message_string = message['body']
+                    document = language_v1.Document(content=message_string, type_=language_v1.Document.Type.PLAIN_TEXT)
+                    sentiment = client.analyze_sentiment(request={'document': document}).document_sentiment
+        
+                    if message['created_at'][:10] == dt.datetime.today().strftime('%Y-%m-%d'):
+                        messages_today += 1
+                        
+                        today_total_magnitude += sentiment.magnitude
+                        today_magnitude_scores.append(sentiment.magnitude)
+                        today_sentiment_scores.append(sentiment.score)
+                    
+                    else:
+                        total_magnitude += sentiment.magnitude
+                        magnitude_scores.append(sentiment.magnitude)
+                        sentiment_scores.append(sentiment.score)
+                        
+                except:
+                    pass
+                    
+            for i in range(len(today_sentiment_scores)):
+                magnitude = today_magnitude_scores[i] / today_total_magnitude
+                sentiment = today_sentiment_scores[i] * magnitude
+                today_total_sentiment_st += sentiment
+                
+            total_magnitude += today_total_magnitude
+            magnitude_scores += today_magnitude_scores
+            sentiment_scores += today_sentiment_scores
+            
+            for i in range(len(sentiment_scores)):
+                magnitude = magnitude_scores[i] / total_magnitude
+                sentiment = sentiment_scores[i] * magnitude
+                total_sentiment_st += sentiment
+                
+            print(f'messages today: {messages_today}\n \
+                    todays sentiment: {today_total_sentiment_st}\n \
+                    overall sentiment: {total_sentiment_st}\n\n')
                     
         except:
             pass
