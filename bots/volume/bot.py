@@ -14,7 +14,7 @@ from config import *
 
 logging.basicConfig(filename='volume.log', filemode='w', level=logging.ERROR)
 
-buying_power = 800000
+buying_power = 80000
 max_trades = 10
 
 api = tradeapi.REST(ALPACA_API_KEY, ALPACA_SECRET_KEY, PAPER_URL, api_version='v2')

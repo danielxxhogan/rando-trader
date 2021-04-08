@@ -1,6 +1,7 @@
 import psycopg2
 import alpaca_trade_api as tradeapi
 import logging
+import math
 
 from config import *
 
@@ -25,7 +26,7 @@ side = {}
 for row in most_active:
     tickers.append(row[0])
     
-buying_power = 800000
+buying_power = 80000
 max_trades = len(tickers)
     
 take_profits = {}
