@@ -62,22 +62,6 @@ for row in loser_rows:
 
 
 conn.commit()
-
-
-# BENZINGA PREMARKET MOVERS USING READ_HTML
-# *****************************************************************************
-# tickers = []
-
-# premarket = pd.read_html('https://www.benzinga.com/premarket/')
-
-# gainers = premarket[5]
-# losers = premarket[6]
-
-# for stock in gainers['Stock']:
-#     tickers.append(stock)
-    
-# for stock in losers['Stock']:
-#     tickers.append(stock)
     
 
 # MARKETWATCH PREMARKET MOVERS
