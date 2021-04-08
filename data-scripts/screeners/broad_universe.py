@@ -147,7 +147,6 @@ for i in range(0, len(tickers), 200):
                 total = 0
 
                 for pattern in todays_patterns:
-                    # print(pattern)
                     total += pattern
                     
                 print(f'total: {total}')
@@ -174,7 +173,7 @@ for i in range(0, len(tickers), 200):
 for key in atrs.keys():
     cursor.execute('insert into broad_universe (ticker, side, atr, score) \
                    values (%s, %s, %s, %s)', (key, seperated[key], atrs[key], scores[key]))
-    
+
 conn.commit()
 
 cursor.close()

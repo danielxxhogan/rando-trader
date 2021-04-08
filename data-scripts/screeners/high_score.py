@@ -147,7 +147,6 @@ for i in range(0, len(tickers), 200):
                 total = 0
             
                 for pattern in todays_patterns:
-                    # print(pattern)
                     total += pattern
                     
                 print(f'total: {total}')
