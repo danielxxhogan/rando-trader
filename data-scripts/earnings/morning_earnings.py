@@ -41,13 +41,17 @@ today['Actual Surprise'] = actuals
 today['Surprise Pct'] = pcts
 
 today = today[[column for column in today.columns if column != 'Surprise']]
+
+# *****************************************************************************
 now = dt.datetime.today().strftime('%Y-%m-%d %H:%M:%S')
 today.to_csv(f'morning-earnings-{now}.csv')
 
+date = dt.datetime.today().strftime('%Y-%m-%d')
+
 for row in today.values:
-    cursor.execute('insert into morning_earnings (company, symbol, quarter, estimate, actual, actual_surprise, surprise_pct) \
-                    values (%s, %s, %s, %s, %s, %s, %s)',
-                    (row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
+    cursor.execute('insert into morning_earnings (date, ticker, estimate, actual, surprise) \
+                    values (%s, %s, %s, %s, %s)',
+                    (date, row[1], row[3], row[4], row[6]))
     
 
 conn.commit()

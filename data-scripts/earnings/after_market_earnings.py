@@ -4,8 +4,6 @@ import psycopg2
 
 from config import *
 
-now = dt.datetime.today().strftime('%Y-%m-%d %H:%M:%S')
-
 conn = psycopg2.connect(user=PG_USER,
                  password=PG_PASSWORD,
                  host=PG_HOST,
@@ -65,12 +63,15 @@ for row in today.values:
     after_market.append(row)
     
 after_market = pd.DataFrame(after_market)
+now = dt.datetime.today().strftime('%Y-%m-%d %H:%M:%S')
 after_market.to_csv(f'after_market_earnings-{now}.csv')
 
+date = dt.datetime.today().strftime('%Y-%m-%d')
+
 for row in after_market.values:
-    cursor.execute('insert into after_market_earnings (company, symbol, quarter, estimate, actual, actual_surprise, surprise_pct) \
-                    values (%s, %s, %s, %s, %s, %s, %s)',
-                    (row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
+    cursor.execute('insert into after_market_earnings (date, ticker, estimate, actual, surprise) \
+                    values (%s, %s, %s, %s, %s)',
+                    (date, row[1], row[3], row[4], row[6]))
 
 
 conn.commit()
