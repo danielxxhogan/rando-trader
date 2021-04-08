@@ -14,6 +14,7 @@ conn = psycopg2.connect(user=PG_USER,
 cursor = conn.cursor()
 cursor.execute('delete from after_market_earnings')
 
+
 # GET ALL EARNINGS UP TO NOW
 # *****************************************************************************
 earnings = pd.read_html('https://www.marketwatch.com/tools/earningscalendar?mod=side_nav')
