@@ -48,7 +48,7 @@ gainers = cursor.fetchall()
 cursor.execute('select * from premarket_losers')
 losers = cursor.fetchall()
 
-buying_power = 50000
+buying_power = 30000
 max_trades = len(gainers) + len(losers)
 
 # *****************************************************************************
