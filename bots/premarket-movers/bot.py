@@ -73,14 +73,14 @@ for row in gainers:
 
         api.submit_order(symbol=row[0],
                       qty=calculate_qty(bars),
-                      side='buy',
+                      side='sell',
                       type='market',
                       time_in_force='gtc',
                       )
         
-        print(f'\nNew long position initiated for {row[0]} \
+        print(f'\nNew short position initiated for {row[0]} \
               \n***************************************\n')
-        logging.error(f'\nNew long position initiated for {row[0]} \
+        logging.error(f'\nNew short position initiated for {row[0]} \
                       \n***************************************\n')
         
     except:
