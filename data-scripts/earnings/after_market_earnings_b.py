@@ -1,4 +1,7 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import psycopg2
 import datetime as dt
 
@@ -15,7 +18,7 @@ cursor = conn.cursor()
 
 browser = webdriver.Chrome()
 browser.get('https://www.benzinga.com/news/earnings')
-earnings = browser.find_element_by_class_name('ag-center-cols-container').text.split('\n')
+earnings = WebDriverWait(browser, 100).until(EC.presence_of_element_located((By.XPATH, '//*[@id="earnings-calendar"]/div/div[2]/div[1]/div/div[2]/div[2]/div[3]/div[2]/div/div'))).text.split('\n')
 browser.quit()
 
 for i in range(0, len(earnings), 11):
