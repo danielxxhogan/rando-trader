@@ -5,23 +5,15 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from google.cloud import language_v1
 import datetime as dt
-import psycopg2
 
 from config import *
 
 def calculate_sentiment(ticker='FUV'):
     print(ticker)
     
-    conn = psycopg2.connect(user=PG_USER,
-                 password=PG_PASSWORD,
-                 host=PG_HOST,
-                 port=PG_PORT,
-                 dbname=PG_DATABASE,
-                 )
-
-    cursor = conn.cursor()
-    
     client = language_v1.LanguageServiceClient()
+    
+    response = {}
 
     # GET ARTICLES FROM FINVIZ AND SPLIT BY ROW
     # *****************************************************************************
@@ -32,22 +24,17 @@ def calculate_sentiment(ticker='FUV'):
     try:
         browser = webdriver.Chrome()
         browser.get(f'https://finviz.com/quote.ashx?t={ticker}')
-        articles = WebDriverWait(browser, 100).until(EC.presence_of_element_located((By.XPATH, '//*[@id="news-table"]/tbody'))).text
+        articles = WebDriverWait(browser, 20).until(EC.presence_of_element_located((By.XPATH, '//*[@id="news-table"]/tbody'))).text
         browser.quit()
         
         articles = articles.split('\n')
         
         total_magnitude = 0.0
-        
         magnitude_scores = []
         sentiment_scores = []
-        
         today_total_magnitude = 0.0
-        
         today_magnitude_scores = []
         today_sentiment_scores = []
-        
-        day = 0
         
         for i in range(0, len(articles), 3):
             time = articles[i+0]
@@ -55,7 +42,6 @@ def calculate_sentiment(ticker='FUV'):
             time = [x for x in time if x != '']
             
             if len(time) == 2:
-                
                 date = time[0]
                 month = date[:3]
                 
@@ -64,15 +50,12 @@ def calculate_sentiment(ticker='FUV'):
                     
                 day = date[4:6]
                 year = date[7:9]
-                
                 date = f'{year}-{month}-{day}'
                 
                 if date == dt.datetime.today().strftime('%y-%m-%d'):
                     today = True
-                
                 else:
                     today = False
-            
             
             try:
                 article_string = articles[i+1]
@@ -80,7 +63,6 @@ def calculate_sentiment(ticker='FUV'):
                 sentiment = client.analyze_sentiment(request={'document': document}).document_sentiment
                 
                 if today == True:
-                    
                     articles_today += 1
                     
                     today_total_magnitude += sentiment.magnitude
@@ -123,62 +105,79 @@ def calculate_sentiment(ticker='FUV'):
     except:
         pass
     
+    response['articles'] = articles_today
+    response['sentiment'] = total_sentiment
+    response['today_sentiment'] = today_total_sentiment
+    
     
     # GET STOCKTWITS DATA FOR EACH STOCK, CALCULATE CURRENT MESSAGES, CURRENT SENTIMENT, AND OVERALL SENTIMENT
     # ********************************************************************************************************
-    r = requests.get(f'https://api.stocktwits.com/api/2/streams/symbol/{ticker}.json')
-    messages = r.json()['messages']
-    
     messages_today = 0
-    
-    total_magnitude = 0.0
     total_sentiment_st = 0.0
-    magnitude_scores = []
-    sentiment_scores = []
-    
-    today_total_magnitude = 0.0
     today_total_sentiment_st = 0.0
-    today_magnitude_scores = []
-    today_sentiment_scores = []
     
-    for message in messages:
-        try:
-            message_string = message['body']
-            document = language_v1.Document(content=message_string, type_=language_v1.Document.Type.PLAIN_TEXT)
-            sentiment = client.analyze_sentiment(request={'document': document}).document_sentiment
-    
-            if message['created_at'][:10] == dt.datetime.today().strftime('%Y-%m-%d'):
-                messages_today += 1
-                
-                today_total_magnitude += sentiment.magnitude
-                today_magnitude_scores.append(sentiment.magnitude)
-                today_sentiment_scores.append(sentiment.score)
-            
-            else:
-                total_magnitude += sentiment.magnitude
-                magnitude_scores.append(sentiment.magnitude)
-                sentiment_scores.append(sentiment.score)
-                
-        except:
-            pass
-            
-    for i in range(len(today_sentiment_scores)):
-        magnitude = today_magnitude_scores[i] / today_total_magnitude
-        sentiment = today_sentiment_scores[i] * magnitude
-        today_total_sentiment_st += sentiment
+    try:
+        r = requests.get(f'https://api.stocktwits.com/api/2/streams/symbol/{ticker}.json')
+        messages = r.json()['messages']
         
-    total_magnitude += today_total_magnitude
-    magnitude_scores += today_magnitude_scores
-    sentiment_scores += today_sentiment_scores
-    
-    for i in range(len(sentiment_scores)):
-        magnitude = magnitude_scores[i] / total_magnitude
-        sentiment = sentiment_scores[i] * magnitude
-        total_sentiment_st += sentiment
+        total_magnitude = 0.0
+        magnitude_scores = []
+        sentiment_scores = []
+        today_total_magnitude = 0.0
+        today_magnitude_scores = []
+        today_sentiment_scores = []
         
-    print(f'messages today: {messages_today} \
-            \ntodays sentiment: {today_total_sentiment_st} \
-            \noverall sentiment: {total_sentiment_st}\n')
+        for message in messages:
+            try:
+                message_string = message['body']
+                document = language_v1.Document(content=message_string, type_=language_v1.Document.Type.PLAIN_TEXT)
+                sentiment = client.analyze_sentiment(request={'document': document}).document_sentiment
+        
+                if message['created_at'][:10] == dt.datetime.today().strftime('%Y-%m-%d'):
+                    messages_today += 1
+                    
+                    today_total_magnitude += sentiment.magnitude
+                    today_magnitude_scores.append(sentiment.magnitude)
+                    today_sentiment_scores.append(sentiment.score)
+                
+                else:
+                    total_magnitude += sentiment.magnitude
+                    magnitude_scores.append(sentiment.magnitude)
+                    sentiment_scores.append(sentiment.score)
+                    
+            except:
+                pass
+                
+        for i in range(len(today_sentiment_scores)):
+            try:
+                magnitude = today_magnitude_scores[i] / today_total_magnitude
+                sentiment = today_sentiment_scores[i] * magnitude
+                today_total_sentiment_st += sentiment
+            except:
+                pass
+            
+        total_magnitude += today_total_magnitude
+        magnitude_scores += today_magnitude_scores
+        sentiment_scores += today_sentiment_scores
+        
+        for i in range(len(sentiment_scores)):
+            try:
+                magnitude = magnitude_scores[i] / total_magnitude
+                sentiment = sentiment_scores[i] * magnitude
+                total_sentiment_st += sentiment
+            except:
+                pass
+            
+        print(f'messages today: {messages_today} \
+                \ntodays sentiment: {today_total_sentiment_st} \
+                \noverall sentiment: {total_sentiment_st}\n')
+                
+    except:
+        pass
+            
+    response['messages'] = messages_today
+    response['today_sentiment_st'] = today_total_sentiment_st
+    response['sentiment_st'] = total_sentiment_st
     
     
     # GET PRESS RELEASES FROM BENZINGA
@@ -189,7 +188,7 @@ def calculate_sentiment(ticker='FUV'):
     try:
         browser = webdriver.Chrome()
         browser.get(f'https://www.benzinga.com/stock-articles/{ticker}/press-releases')
-        press_releases = WebDriverWait(browser, 100).until(EC.presence_of_element_located((By.XPATH, '//*[@id="benzinga-content-area"]/div/div/div/div[1]/div[1]'))).text
+        press_releases = WebDriverWait(browser, 20).until(EC.presence_of_element_located((By.XPATH, '//*[@id="benzinga-content-area"]/div/div/div/div[1]/div[1]'))).text
         browser.quit()
         
         press_releases = press_releases.split('\n')
@@ -215,6 +214,8 @@ def calculate_sentiment(ticker='FUV'):
         
     except:
         pass
+    
+    response['press_releases'] = press_releases_today
     
     
     # LOOP THROUGH PRESS_RELEASES AND GET ALL 
@@ -245,23 +246,31 @@ def calculate_sentiment(ticker='FUV'):
                'Authorization': f'Token {QUIVER_API_KEY}'}
     
     # ----- contract -----
-    r = requests.get(f'{QUIVER_URL}/historical/govcontractsall/{ticker}', headers=headers)
-    contracts = r.json()
-    
     num_contracts = 0
-    for filing in contracts:
-        if filing['Date'] > month_ago:        
-            num_contracts += 1
-            
-    print(f'contracts: {num_contracts}')
+    
+    try:
+        r = requests.get(f'{QUIVER_URL}/historical/govcontractsall/{ticker}', headers=headers)
+        contracts = r.json()
+        
+        for filing in contracts:
+            if filing['Date'] > month_ago:        
+                num_contracts += 1
+                
+        print(f'contracts: {num_contracts}')
+        
+    except:
+        pass
+    
+    response['contracts'] = num_contracts
     
     
     # ----- lobbying -----
+    num_lobbying = 0
+    
     try:
         r = requests.get(f'{QUIVER_URL}/historical/lobbying/{ticker}', headers=headers)
         lobbying = r.json()
         
-        num_lobbying = 0
         for filing in lobbying:
             if filing['Date'] > month_ago:        
                 num_lobbying += 1
@@ -271,74 +280,104 @@ def calculate_sentiment(ticker='FUV'):
     except:
         pass
     
+    response['lobbying'] = num_lobbying
+    
     
     # ----- congress -----
-    r = requests.get(f'{QUIVER_URL}/historical/congresstrading/{ticker}', headers=headers)
-    congress = r.json()
-    
     congress_buys = 0
     congress_sales = 0
     
-    for filing in congress:
-        if filing['TransactionDate'] > month_ago and filing['Transaction'] == 'Purchase':
-            congress_buys += 1
-            
-        elif filing['TransactionDate'] > month_ago and filing['Transaction'] == 'Sale':
-            congress_sales += 1
-            
-    print(f'congress buys: {congress_buys}')
-    print(f'congress sells: {congress_sales}')
-            
+    try:
+        r = requests.get(f'{QUIVER_URL}/historical/congresstrading/{ticker}', headers=headers)
+        congress = r.json()
+        
+        
+        for filing in congress:
+            if filing['TransactionDate'] > month_ago and filing['Transaction'] == 'Purchase':
+                congress_buys += 1
+                
+            elif filing['TransactionDate'] > month_ago and filing['Transaction'] == 'Sale':
+                congress_sales += 1
+                
+        print(f'congress buys: {congress_buys}')
+        print(f'congress sells: {congress_sales}')
+        
+    except:
+        pass
+    
+    response['congress_buys'] = congress_buys
+    response['congress_sales'] = congress_sales
             
     # ----- senate -----
-    r = requests.get(f'{QUIVER_URL}/historical/senatetrading/{ticker}', headers=headers)
-    senate = r.json()
-    
     senate_buys = 0
     senate_sales = 0
     
-    for filing in senate:
-        if filing['Date'] > month_ago and filing['Transaction'] == 'Purchase':
-            senate_buys += 1
-            
-        elif filing['Date'] > month_ago and filing['Transaction'] == 'Sale':
-            senate_sales += 1
-            
-    print(f'senate buys: {senate_buys}')
-    print(f'senate sells: {senate_sales}')
-            
+    try:
+        r = requests.get(f'{QUIVER_URL}/historical/senatetrading/{ticker}', headers=headers)
+        senate = r.json()
+        
+        
+        for filing in senate:
+            if filing['Date'] > month_ago and filing['Transaction'] == 'Purchase':
+                senate_buys += 1
+                
+            elif filing['Date'] > month_ago and filing['Transaction'] == 'Sale':
+                senate_sales += 1
+                
+        print(f'senate buys: {senate_buys}')
+        print(f'senate sells: {senate_sales}')
+        
+    except:
+        pass
+    
+    response['senate_buys'] = senate_buys
+    response['senate_sales'] = senate_sales        
     
     # ----- house -----
-    r = requests.get(f'{QUIVER_URL}/historical/housetrading/{ticker}', headers=headers)
-    house = r.json()
-    
     house_buys = 0
     house_sales = 0
     
-    for filing in house:
-        if filing['Date'] > month_ago and filing['Transaction'] == 'Purchase':
-            house_buys += 1
-            
-        elif filing['Date'] > month_ago and filing['Transaction'] == 'Sale':
-            house_sales += 1
-            
-    print(f'house buys: {house_buys}')
-    print(f'house sells: {house_sales}\n')
+    try:
+        r = requests.get(f'{QUIVER_URL}/historical/housetrading/{ticker}', headers=headers)
+        house = r.json()
+        
+        
+        for filing in house:
+            if filing['Date'] > month_ago and filing['Transaction'] == 'Purchase':
+                house_buys += 1
+                
+            elif filing['Date'] > month_ago and filing['Transaction'] == 'Sale':
+                house_sales += 1
+                
+        print(f'house buys: {house_buys}')
+        print(f'house sells: {house_sales}\n')
+        
+    except:
+        pass
     
+    response['house_buys'] = house_buys
+    response['house_sales'] = house_sales
     
     # GET INSIDER TRADING
     # *****************************************************************************
-    month_ago = (dt.datetime.today() - dt.timedelta(days=30)).strftime('%Y-%m-%d')
+    insider_trades = 0
     
-    cursor.execute('select * from insider_trading')
-    insider_trading = cursor.fetchall()
+    try:
+        browser = webdriver.Chrome()
+        browser.get(f'https://finviz.com/quote.ashx?t={ticker}')
+        insider_trading = WebDriverWait(browser, 20).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[4]/div/table[3]/tbody/tr[12]/td/table/tbody'))).text.split('\n')
+        browser.quit()
+        
+        for filing in insider_trading:
+            if 'Buy' in filing:
+                insider_trades += 1
+                
+        print(f'insider trades: {insider_trades}')
+                
+    except:
+        pass
     
-    num_insider_trades = 0
-    for trade in insider_trading:
-        if trade[1].strftime('%Y-%m-%d') > month_ago and trade[3] == ticker:
-            num_insider_trades += 1
-            
-    print(f'insider trades: {num_insider_trades}\n')
+    response['insider_trades'] = insider_trades
             
     
     # GET ANALYST RATINGS FROM BENZINGA
@@ -349,12 +388,11 @@ def calculate_sentiment(ticker='FUV'):
     try:
         browser = webdriver.Chrome()
         browser.get(f'https://www.benzinga.com/stock/{ticker}')
-        analyst_ratings = WebDriverWait(browser, 100).until(EC.presence_of_element_located((By.XPATH, '//*[@id="benzinga-main"]/div[2]/div[2]/div[1]/div/div[5]/div/div/table[2]/tbody'))).text
+        analyst_ratings = WebDriverWait(browser, 20).until(EC.presence_of_element_located((By.XPATH, '//*[@id="benzinga-main"]/div[2]/div[2]/div[1]/div/div[5]/div/div/table[2]/tbody'))).text
         browser.quit()
         
         analyst_ratings = analyst_ratings.split('\n')
-        
-    
+
         for rating in analyst_ratings:
             rating = rating.split()
             if 'Upgrades' in rating:
@@ -368,11 +406,11 @@ def calculate_sentiment(ticker='FUV'):
     except:
         pass
     
+    response['upgrades'] = upgrades
+    response['downgrades'] = downgrades
     
-    conn.commit()
-
-    cursor.close()
-    conn.close()
+    print(response)
+    return response
 
 
 if __name__ == '__main__':
