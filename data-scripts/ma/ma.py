@@ -36,3 +36,28 @@ for line in ma:
     if ticker and today == True:
         ticker = line[ticker.start()+1:ticker.end()-1]
         print(ticker)
+        
+        ticker_sentiment = sentiment.calculate_sentiment(f'{ticker}')
+        print(ticker_sentiment)
+        
+        cursor.execute('insert into ma_sentiment (ticker, articles, sentiment, \
+                        today_sentiment, messages, today_sentiment_st, sentiment_st, \
+                        press_releases, contracts, lobbying, congress_buys, \
+                        congress_sells, senate_buys, senate_sells, house_buys, \
+                        house_sells, insider_trades, upgrades, downgrades) \
+                        values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, \
+                                %s, %s, %s, %s, %s, %s, %s)',
+                        (ticker, ticker_sentiment['articles'], ticker_sentiment['sentiment'],
+                        ticker_sentiment['today_sentiment'], ticker_sentiment['messages'],
+                        ticker_sentiment['today_sentiment_st'], ticker_sentiment['sentiment_st'],
+                        ticker_sentiment['press_releases'], ticker_sentiment['contracts'],
+                        ticker_sentiment['lobbying'], ticker_sentiment['congress_buys'],
+                        ticker_sentiment['congress_sales'], ticker_sentiment['senate_buys'],
+                        ticker_sentiment['senate_sales'], ticker_sentiment['house_buys'],
+                        ticker_sentiment['house_sales'], ticker_sentiment['insider_trades'],
+                        ticker_sentiment['upgrades'], ticker_sentiment['downgrades']))
+        
+        conn.commit()
+
+cursor.close()
+conn.close()
