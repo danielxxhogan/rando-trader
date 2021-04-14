@@ -51,34 +51,23 @@ cursor.execute('create table if not exists lobbying (lobbying_id serial primary 
                                                      issue varchar, \
                                                      specific_issue varchar, \
                                                      ticker varchar);')
+    
 
-# ----- SCREENERS -----
+# ----- INSIDER TRADING -----
 # *****************************************************************************
-cursor.execute('create table if not exists high_score (ticker varchar, \
-                                                          side varchar, \
-                                                          atr decimal, \
-                                                          score decimal);')
+cursor.execute('create table if not exists insider_trading (it_id serial primary key, \
+                                                            filing_date date, \
+                                                            trade_date date, \
+                                                            ticker varchar, \
+                                                            company varchar, \
+                                                            insider varchar, \
+                                                            title varchar, \
+                                                            price decimal, \
+                                                            qty decimal, \
+                                                            owned decimal, \
+                                                            change varchar, \
+                                                            value decimal)')
     
-cursor.execute('create table if not exists rvol_seperated (ticker varchar, \
-                                                           side varchar, \
-                                                           atr decimal, \
-                                                           rvol decimal, \
-                                                           score decimal);')
-    
-cursor.execute('create table if not exists broad_universe (ticker varchar, \
-                                                           side varchar, \
-                                                           atr decimal, \
-                                                           score decimal);')
-    
-cursor.execute('create table if not exists heavily_traded (ticker varchar, \
-                                                           side varchar, \
-                                                           atr decimal, \
-                                                           score decimal);')
-
-# ----- PORTFOLIOS -----
-# *****************************************************************************
-# cursor.execute('create table if not exists twenty_min_macd_portfolio (ticker varchar, \
-#                                                                       side varchar)')
 
 # ----- EARNINGS -----
 # *****************************************************************************
@@ -104,22 +93,6 @@ cursor.execute('create table if not exists earnings_sentiment (date date, \
                                                                messages integer, \
                                                                st_sentiment_today decimal, \
                                                                st_overall_sentiment decimal)')
-
-    
-# ----- INSIDER TRADING -----
-# *****************************************************************************
-cursor.execute('create table if not exists insider_trading (it_id serial primary key, \
-                                                            filing_date date, \
-                                                            trade_date date, \
-                                                            ticker varchar, \
-                                                            company varchar, \
-                                                            insider varchar, \
-                                                            title varchar, \
-                                                            price decimal, \
-                                                            qty decimal, \
-                                                            owned decimal, \
-                                                            change varchar, \
-                                                            value decimal)')
     
 
 # ----- PREMARKET MOVERS -----
@@ -141,6 +114,99 @@ cursor.execute('create table if not exists most_active (ticker varchar, \
                                                         price varchar, \
                                                         change varchar, \
                                                         volume varchar)')
+    
+
+# MERGERS AND ACQUISITIONS AND SENTIMENT
+# *****************************************************************************
+cursor.execute('create table if not exists ma_sentiment (ticker varchar, \
+                                                         articles integer, \
+                                                         sentiment decimal, \
+                                                         today_sentiment decimal, \
+                                                         messages integer, \
+                                                         today_sentiment_st decimal, \
+                                                         sentiment_st decimal, \
+                                                         press_releases integer, \
+                                                         contracts integer, \
+                                                         lobbying integer, \
+                                                         congress_buys integer, \
+                                                         congress_sells integer, \
+                                                         senate_buys integer, \
+                                                         senate_sells integer, \
+                                                         house_buys integer, \
+                                                         house_sells integer, \
+                                                         insider_trades integer, \
+                                                         upgrades integer, \
+                                                         downgrades integer)')
+    
+    
+# ANALYST UPGRADES AND SENTIMENT
+# *****************************************************************************
+cursor.execute('create table if not exists upgrades_sentiment (ticker varchar, \
+                                                         articles integer, \
+                                                         sentiment decimal, \
+                                                         today_sentiment decimal, \
+                                                         messages integer, \
+                                                         today_sentiment_st decimal, \
+                                                         sentiment_st decimal, \
+                                                         press_releases integer, \
+                                                         contracts integer, \
+                                                         lobbying integer, \
+                                                         congress_buys integer, \
+                                                         congress_sells integer, \
+                                                         senate_buys integer, \
+                                                         senate_sells integer, \
+                                                         house_buys integer, \
+                                                         house_sells integer, \
+                                                         insider_trades integer, \
+                                                         upgrades integer, \
+                                                         downgrades integer)')
+    
+    
+# ANALYST UPGRADES AND SENTIMENT
+# *****************************************************************************
+cursor.execute('create table if not exists downgrades_sentiment (ticker varchar, \
+                                                         articles integer, \
+                                                         sentiment decimal, \
+                                                         today_sentiment decimal, \
+                                                         messages integer, \
+                                                         today_sentiment_st decimal, \
+                                                         sentiment_st decimal, \
+                                                         press_releases integer, \
+                                                         contracts integer, \
+                                                         lobbying integer, \
+                                                         congress_buys integer, \
+                                                         congress_sells integer, \
+                                                         senate_buys integer, \
+                                                         senate_sells integer, \
+                                                         house_buys integer, \
+                                                         house_sells integer, \
+                                                         insider_trades integer, \
+                                                         upgrades integer, \
+                                                         downgrades integer)')
+    
+    
+# ----- SCREENERS -----
+# *****************************************************************************
+cursor.execute('create table if not exists high_score (ticker varchar, \
+                                                          side varchar, \
+                                                          atr decimal, \
+                                                          score decimal);')
+    
+cursor.execute('create table if not exists rvol_seperated (ticker varchar, \
+                                                           side varchar, \
+                                                           atr decimal, \
+                                                           rvol decimal, \
+                                                           score decimal);')
+    
+cursor.execute('create table if not exists broad_universe (ticker varchar, \
+                                                           side varchar, \
+                                                           atr decimal, \
+                                                           score decimal);')
+    
+cursor.execute('create table if not exists heavily_traded (ticker varchar, \
+                                                           side varchar, \
+                                                           atr decimal, \
+                                                           score decimal);')
 
 
 conn.commit()
