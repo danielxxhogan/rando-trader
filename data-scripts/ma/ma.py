@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
 import psycopg2
 import datetime as dt
 import re
@@ -15,10 +16,12 @@ conn = psycopg2.connect(user=PG_USER,
                  port=PG_PORT,
                  dbname=PG_DATABASE,
                  )
-
 cursor = conn.cursor()
+cursor.execute('delete from ma_sentiment')
 
-browser = webdriver.Chrome()
+options = webdriver.ChromeOptions()
+options.add_argument('--headless')
+browser = webdriver.Chrome(options=options)
 browser.get('https://www.benzinga.com/m-a')
 ma = WebDriverWait(browser, 100).until(EC.presence_of_element_located((By.XPATH, '//*[@id="ma-calendar"]/div/div[2]/div[1]/div/div[2]/div[2]/div[3]/div[2]/div/div'))).text.split('\n')
 browser.quit()
