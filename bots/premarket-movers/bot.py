@@ -73,7 +73,7 @@ for row in gainers:
 
         api.submit_order(symbol=row[0],
                       qty=calculate_qty(bars),
-                      side='buy',
+                      side='sell',
                       type='market',
                       time_in_force='gtc',
                       )
@@ -96,7 +96,7 @@ for row in losers:
         
         api.submit_order(symbol=row[0],
                       qty=calculate_qty(bars),
-                      side='buy',
+                      side='sell',
                       type='market',
                       time_in_force='gtc',
                       )
