@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
 from google.cloud import language_v1
 import datetime as dt
 
@@ -22,10 +23,11 @@ def calculate_sentiment(ticker='FUV'):
     today_total_sentiment = 0.0
     
     try:
-        browser = webdriver.Chrome()
+        options = webdriver.ChromeOptions()
+        # options.add_argument('--headless')
+        browser = webdriver.Chrome(options=options)
         browser.get(f'https://finviz.com/quote.ashx?t={ticker}')
         articles = WebDriverWait(browser, 20).until(EC.presence_of_element_located((By.XPATH, '//*[@id="news-table"]/tbody'))).text
-        browser.quit()
         
         articles = articles.split('\n')
         
@@ -186,12 +188,10 @@ def calculate_sentiment(ticker='FUV'):
     press_releases_today = 0
     
     try:
-        browser = webdriver.Chrome()
         browser.get(f'https://www.benzinga.com/stock-articles/{ticker}/press-releases')
         press_releases = WebDriverWait(browser, 20).until(EC.presence_of_element_located((By.XPATH, '//*[@id="benzinga-content-area"]/div/div/div/div[1]/div[1]'))).text
-        browser.quit()
-        
         press_releases = press_releases.split('\n')
+        
         date = press_releases[0].split()
         month = date[1]
         day = date[2][:-1]
@@ -363,10 +363,8 @@ def calculate_sentiment(ticker='FUV'):
     insider_trades = 0
     
     try:
-        browser = webdriver.Chrome()
         browser.get(f'https://finviz.com/quote.ashx?t={ticker}')
         insider_trading = WebDriverWait(browser, 20).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[4]/div/table[3]/tbody/tr[12]/td/table/tbody'))).text.split('\n')
-        browser.quit()
         
         for filing in insider_trading:
             if 'Buy' in filing:
@@ -386,11 +384,8 @@ def calculate_sentiment(ticker='FUV'):
     downgrades = 0
     
     try:
-        browser = webdriver.Chrome()
         browser.get(f'https://www.benzinga.com/stock/{ticker}')
         analyst_ratings = WebDriverWait(browser, 20).until(EC.presence_of_element_located((By.XPATH, '//*[@id="benzinga-main"]/div[2]/div[2]/div[1]/div/div[5]/div/div/table[2]/tbody'))).text
-        browser.quit()
-        
         analyst_ratings = analyst_ratings.split('\n')
 
         for rating in analyst_ratings:
@@ -410,8 +405,10 @@ def calculate_sentiment(ticker='FUV'):
     response['downgrades'] = downgrades
     
     print(response)
+    browser.quit()
+    
     return response
 
 
-if __name__ == '__main__':
-    calculate_sentiment()
+# if __name__ == '__main__':
+#     calculate_sentiment()
