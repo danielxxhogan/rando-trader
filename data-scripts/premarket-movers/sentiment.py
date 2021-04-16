@@ -1,168 +1,414 @@
 import requests
-from bs4 import BeautifulSoup
-import psycopg2
-import pandas as pd
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+from google.cloud import language_v1
 import datetime as dt
 
 from config import *
 
-conn = psycopg2.connect(user=PG_USER,
-                 password=PG_PASSWORD,
-                 host=PG_HOST,
-                 port=PG_PORT,
-                 dbname=PG_DATABASE,
-                 )
-
-cursor = conn.cursor()
-# cursor.execute('delete from gainers_sentiment')
-# cursor.execute('delete from losers_sentiment')
-
-
-# BENZINGA PREMARKET MOVERS USING BS4
-# *****************************************************************************
-r = requests.get(url='https://www.benzinga.com/premarket/')
-
-src = r.content
-soup = BeautifulSoup(src, 'lxml')
-
-tables = soup.find_all('table')
-gainers = tables[5]
-losers = tables[6]
-
-gainer_rows = gainers.find_all('tr')
-
-for row in gainer_rows:
-    tds = row.find_all('td')
+def calculate_sentiment(ticker='FUV'):
+    print(ticker)
     
-    if len(tds) > 0:
-        ticker = tds[0].text.replace('\n', '').replace(' ', '')
-        price = tds[2].text.replace('\n', '').replace(' ', '')
-        change = tds[3].text.replace('\n', '').replace(' ', '')
-        volume = tds[4].text.replace('\n', '').replace(' ', '')
+    client = language_v1.LanguageServiceClient()
+    
+    response = {}
+
+    # GET ARTICLES FROM FINVIZ AND SPLIT BY ROW
+    # *****************************************************************************
+    articles_today = 0
+    total_sentiment = 0.0
+    today_total_sentiment = 0.0
+    
+    try:
+        options = webdriver.ChromeOptions()
+        # options.add_argument('--headless')
+        browser = webdriver.Chrome(options=options)
+        browser.get(f'https://finviz.com/quote.ashx?t={ticker}')
+        articles = WebDriverWait(browser, 20).until(EC.presence_of_element_located((By.XPATH, '//*[@id="news-table"]/tbody'))).text
         
-        r = requests.get(f'https://api.polygon.io/v1/meta/symbols/{ticker}/news?apiKey={POLYGON_API_KEY}')
-        articles = r.json()
+        articles = articles.split('\n')
         
-        current_articles = []
+        total_magnitude = 0.0
+        magnitude_scores = []
+        sentiment_scores = []
+        today_total_magnitude = 0.0
+        today_magnitude_scores = []
+        today_sentiment_scores = []
         
-        for article in articles:
-            if article['timestamp'][:10] == dt.datetime.today().strftime('%Y-%m-%d'):
-                current_articles.append(article)
-                
-            # here I will loop through all the articles and make a request to the
-            # google language api. I will get a consolidated sentiment score for
-            # the ticker.
-                
-        for article in current_articles:
+        for i in range(0, len(articles), 3):
+            time = articles[i+0]
+            time = time.split(' ')
+            time = [x for x in time if x != '']
             
-            # here I will loop through all todays articles and make a request to
-            # google language api using the python client. I will need to copy
-            # my credentials.json file. I will need to set the env variable, and
-            # I will have to add the command to export the env variable in the
-            # cronjob.
+            if len(time) == 2:
+                date = time[0]
+                month = date[:3]
+                
+                if month == 'Apr':
+                    month = '04'
+                    
+                day = date[4:6]
+                year = date[7:9]
+                date = f'{year}-{month}-{day}'
+                
+                if date == dt.datetime.today().strftime('%y-%m-%d'):
+                    today = True
+                else:
+                    today = False
             
-            pass
+            try:
+                article_string = articles[i+1]
+                document = language_v1.Document(content=article_string, type_=language_v1.Document.Type.PLAIN_TEXT)
+                sentiment = client.analyze_sentiment(request={'document': document}).document_sentiment
+                
+                if today == True:
+                    articles_today += 1
+                    
+                    today_total_magnitude += sentiment.magnitude
+                    today_magnitude_scores.append(sentiment.magnitude)
+                    today_sentiment_scores.append(sentiment.score)
+                    
+                elif today == False:
+                    total_magnitude += sentiment.magnitude
+                    magnitude_scores.append(sentiment.magnitude)
+                    sentiment_scores.append(sentiment.score)
+                    
+            except:
+                pass
+            
         
+        for i in range(len(today_sentiment_scores)):
+            try:
+                magnitude = today_magnitude_scores[i] / today_total_magnitude
+                sentiment = today_sentiment_scores[i] * magnitude
+                today_total_sentiment += sentiment
+            except:
+                pass
+            
+        total_magnitude += today_total_magnitude
+        magnitude_scores += today_magnitude_scores
+        sentiment_scores += today_sentiment_scores
+        
+        for i in range(len(sentiment_scores)):
+            try:
+                magnitude = magnitude_scores[i] / total_magnitude
+                sentiment = sentiment_scores[i] * magnitude
+                total_sentiment += sentiment
+            except:
+                pass
+            
+        print(f'articles today: {articles_today} \
+                \ntodays sentiment: {today_total_sentiment} \
+                \noverall sentiment: {total_sentiment}\n')
+                
+    except:
+        pass
+    
+    response['articles'] = articles_today
+    response['sentiment'] = total_sentiment
+    response['today_sentiment'] = today_total_sentiment
+    
+    
+    # GET STOCKTWITS DATA FOR EACH STOCK, CALCULATE CURRENT MESSAGES, CURRENT SENTIMENT, AND OVERALL SENTIMENT
+    # ********************************************************************************************************
+    messages_today = 0
+    total_sentiment_st = 0.0
+    today_total_sentiment_st = 0.0
+    
+    try:
         r = requests.get(f'https://api.stocktwits.com/api/2/streams/symbol/{ticker}.json')
         messages = r.json()['messages']
         
-        current_messages = []
+        total_magnitude = 0.0
+        magnitude_scores = []
+        sentiment_scores = []
+        today_total_magnitude = 0.0
+        today_magnitude_scores = []
+        today_sentiment_scores = []
         
         for message in messages:
-            if message['created_at'][:10] == dt.datetime.today().strftime('%Y-%m-%d'):
-                current_messages.append(article)
+            try:
+                message_string = message['body']
+                document = language_v1.Document(content=message_string, type_=language_v1.Document.Type.PLAIN_TEXT)
+                sentiment = client.analyze_sentiment(request={'document': document}).document_sentiment
+        
+                if message['created_at'][:10] == dt.datetime.today().strftime('%Y-%m-%d'):
+                    messages_today += 1
+                    
+                    today_total_magnitude += sentiment.magnitude
+                    today_magnitude_scores.append(sentiment.magnitude)
+                    today_sentiment_scores.append(sentiment.score)
+                
+                else:
+                    total_magnitude += sentiment.magnitude
+                    magnitude_scores.append(sentiment.magnitude)
+                    sentiment_scores.append(sentiment.score)
+                    
+            except:
+                pass
+                
+        for i in range(len(today_sentiment_scores)):
+            try:
+                magnitude = today_magnitude_scores[i] / today_total_magnitude
+                sentiment = today_sentiment_scores[i] * magnitude
+                today_total_sentiment_st += sentiment
+            except:
+                pass
             
-            # here I will make a request to the google language api for each message
-            # from the stocktwits api and get an aggregate sentiment score
+        total_magnitude += today_total_magnitude
+        magnitude_scores += today_magnitude_scores
+        sentiment_scores += today_sentiment_scores
+        
+        for i in range(len(sentiment_scores)):
+            try:
+                magnitude = magnitude_scores[i] / total_magnitude
+                sentiment = sentiment_scores[i] * magnitude
+                total_sentiment_st += sentiment
+            except:
+                pass
             
-        for message in current_messages:
+        print(f'messages today: {messages_today} \
+                \ntodays sentiment: {today_total_sentiment_st} \
+                \noverall sentiment: {total_sentiment_st}\n')
+                
+    except:
+        pass
             
-            # here I will loop through all the messages from today and get a
-            # sentiment score for the day
+    response['messages'] = messages_today
+    response['today_sentiment_st'] = today_total_sentiment_st
+    response['sentiment_st'] = total_sentiment_st
+    
+    
+    # GET PRESS RELEASES FROM BENZINGA
+    # *****************************************************************************
+    months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    press_releases_today = 0
+    
+    try:
+        browser.get(f'https://www.benzinga.com/stock-articles/{ticker}/press-releases')
+        press_releases = WebDriverWait(browser, 20).until(EC.presence_of_element_located((By.XPATH, '//*[@id="benzinga-content-area"]/div/div/div/div[1]/div[1]'))).text
+        press_releases = press_releases.split('\n')
+        
+        date = press_releases[0].split()
+        month = date[1]
+        day = date[2][:-1]
+        year = date[3]
+        
+        month = months.index(month) + 1
+        if month < 10:
+            month = f'0{str(month)}'
+        else:
+            month = str(month)
             
-            pass
+        date = f'{year}-{month}-{day}'
+        today = dt.datetime.today().strftime('%Y-%m-%d')
         
-        # here I will scrape stocktwits api to get its sentiment score and the
-        # change in mentions
+        if date == today:
+            for j in range(1, len(press_releases), 2):
+                press_releases_today += 1
+            
+        print(f'press releases today: {press_releases_today}\n')
         
-        
-        
-        cursor.execute('insert into gainers_sentiment (ticker, price, change, \
-                        volume, articles_today, sentiment_today, sentiment, \
-                        messages_today, st_sentiment_today, messages_sentiment, \
-                        st_sentiment, mentions) \
-                        values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
-                        (ticker, company, price, change, volume, len(current_articles),
-                         sentiment_today, sentiment, len(messages_today),
-                         st_sentiment_today, messages_sentiment, st_sentiment, mentions))
-
-
-
-
-
-
-
-
-
-
-
-loser_rows = losers.find_all('tr')
-
-for row in loser_rows:
-    tds = row.find_all('td')
+    except:
+        pass
     
-    if len(tds) > 0:
-        ticker = tds[0].text.replace('\n', '').replace(' ', '')
-        company = tds[1].text.replace('\n', '').replace(' ', '')
-        price = tds[2].text.replace('\n', '').replace(' ', '')
-        change = tds[3].text.replace('\n', '').replace(' ', '')
-        volume = tds[4].text.replace('\n', '').replace(' ', '')
+    response['press_releases'] = press_releases_today
+    
+    
+    # LOOP THROUGH PRESS_RELEASES AND GET ALL 
+    # for i in range(100):
+    #     try:
+    #         browser = webdriver.Chrome()
+    #         browser.get('https://www.benzinga.com/stock-articles/fb/press-releases')
+    #         press_release = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, f'//*[@id="benzinga-content-area"]/div/div/div/div[1]/div[{i+1}]'))).text
+    #         browser.quit()
+            
+    #         press_release = press_release.split('\n')
+            
+    #         for j in range(1, len(press_release), 2):
+    #             print(press_release[j])
+            
+    #     except:
+    #         break
+    
+    
+    # GET QUIVER DATA FOR TICKER
+    # *****************************************************************************
+    month_ago = (dt.datetime.today() - dt.timedelta(days=30)).strftime('%Y-%m-%d')
+    
+    QUIVER_URL = 'https://api.quiverquant.com/beta'
+    
+    headers = {'accept': 'application/json',
+               'X-CSRFToken': 'TyTJwjuEC7VV7mOqZ622haRaaUr0x0Ng4nrwSRFKQs7vdoBcJlK9qjAS69ghzhFu',
+               'Authorization': f'Token {QUIVER_API_KEY}'}
+    
+    # ----- contract -----
+    num_contracts = 0
+    
+    try:
+        r = requests.get(f'{QUIVER_URL}/historical/govcontractsall/{ticker}', headers=headers)
+        contracts = r.json()
         
-        cursor.execute('insert into premarket_losers (ticker, company, price, change, volume) \
-                        values (%s, %s, %s, %s, %s)',
-                        (ticker, company, price, change, volume))
-
-
-conn.commit()
-
-
-# BENZINGA PREMARKET MOVERS USING READ_HTML
-# *****************************************************************************
-# tickers = []
-
-# premarket = pd.read_html('https://www.benzinga.com/premarket/')
-
-# gainers = premarket[5]
-# losers = premarket[6]
-
-# for stock in gainers['Stock']:
-#     tickers.append(stock)
-    
-# for stock in losers['Stock']:
-#     tickers.append(stock)
-    
-
-# MARKETWATCH PREMARKET MOVERS
-# *****************************************************************************
-# data = pd.read_html('https://www.marketwatch.com/tools/screener/premarket?mod=side_nav')
-# gainers = data[0]
-# losers = data[1]
-
-# for gainer in gainers.values:
-    
-#     cursor.execute('insert into premarket_gainers (ticker, company, price, change, volume) \
-#                     values (%s, %s, %s, %s, %s)',
-#                     (gainer[0].split()[0], gainer[1], gainer[2], gainer[5], gainer[3]))
+        for filing in contracts:
+            if filing['Date'] > month_ago:        
+                num_contracts += 1
+                
+        print(f'contracts: {num_contracts}')
         
-# for loser in losers.values:
+    except:
+        pass
     
-#     cursor.execute('insert into premarket_losers (ticker, company, price, change, volume) \
-#                     values (%s, %s, %s, %s, %s)',
-#                     (loser[0].split()[0], loser[1], loser[2], loser[5], loser[3]))
+    response['contracts'] = num_contracts
+    
+    
+    # ----- lobbying -----
+    num_lobbying = 0
+    
+    try:
+        r = requests.get(f'{QUIVER_URL}/historical/lobbying/{ticker}', headers=headers)
+        lobbying = r.json()
+        
+        for filing in lobbying:
+            if filing['Date'] > month_ago:        
+                num_lobbying += 1
+                
+        print(f'lobbying: {num_lobbying}\n')
+        
+    except:
+        pass
+    
+    response['lobbying'] = num_lobbying
+    
+    
+    # ----- congress -----
+    congress_buys = 0
+    congress_sales = 0
+    
+    try:
+        r = requests.get(f'{QUIVER_URL}/historical/congresstrading/{ticker}', headers=headers)
+        congress = r.json()
+        
+        
+        for filing in congress:
+            if filing['TransactionDate'] > month_ago and filing['Transaction'] == 'Purchase':
+                congress_buys += 1
+                
+            elif filing['TransactionDate'] > month_ago and filing['Transaction'] == 'Sale':
+                congress_sales += 1
+                
+        print(f'congress buys: {congress_buys}')
+        print(f'congress sells: {congress_sales}')
+        
+    except:
+        pass
+    
+    response['congress_buys'] = congress_buys
+    response['congress_sales'] = congress_sales
+            
+    # ----- senate -----
+    senate_buys = 0
+    senate_sales = 0
+    
+    try:
+        r = requests.get(f'{QUIVER_URL}/historical/senatetrading/{ticker}', headers=headers)
+        senate = r.json()
+        
+        
+        for filing in senate:
+            if filing['Date'] > month_ago and filing['Transaction'] == 'Purchase':
+                senate_buys += 1
+                
+            elif filing['Date'] > month_ago and filing['Transaction'] == 'Sale':
+                senate_sales += 1
+                
+        print(f'senate buys: {senate_buys}')
+        print(f'senate sells: {senate_sales}')
+        
+    except:
+        pass
+    
+    response['senate_buys'] = senate_buys
+    response['senate_sales'] = senate_sales        
+    
+    # ----- house -----
+    house_buys = 0
+    house_sales = 0
+    
+    try:
+        r = requests.get(f'{QUIVER_URL}/historical/housetrading/{ticker}', headers=headers)
+        house = r.json()
+        
+        
+        for filing in house:
+            if filing['Date'] > month_ago and filing['Transaction'] == 'Purchase':
+                house_buys += 1
+                
+            elif filing['Date'] > month_ago and filing['Transaction'] == 'Sale':
+                house_sales += 1
+                
+        print(f'house buys: {house_buys}')
+        print(f'house sells: {house_sales}\n')
+        
+    except:
+        pass
+    
+    response['house_buys'] = house_buys
+    response['house_sales'] = house_sales
+    
+    # GET INSIDER TRADING
+    # *****************************************************************************
+    insider_trades = 0
+    
+    try:
+        browser.get(f'https://finviz.com/quote.ashx?t={ticker}')
+        insider_trading = WebDriverWait(browser, 20).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[4]/div/table[3]/tbody/tr[12]/td/table/tbody'))).text.split('\n')
+        
+        for filing in insider_trading:
+            if 'Buy' in filing:
+                insider_trades += 1
+                
+        print(f'insider trades: {insider_trades}')
+                
+    except:
+        pass
+    
+    response['insider_trades'] = insider_trades
+            
+    
+    # GET ANALYST RATINGS FROM BENZINGA
+    # *****************************************************************************
+    upgrades = 0
+    downgrades = 0
+    
+    try:
+        browser.get(f'https://www.benzinga.com/stock/{ticker}')
+        analyst_ratings = WebDriverWait(browser, 20).until(EC.presence_of_element_located((By.XPATH, '//*[@id="benzinga-main"]/div[2]/div[2]/div[1]/div/div[5]/div/div/table[2]/tbody'))).text
+        analyst_ratings = analyst_ratings.split('\n')
+
+        for rating in analyst_ratings:
+            rating = rating.split()
+            if 'Upgrades' in rating:
+                upgrades += 1
+            elif 'Downgrades' in rating:
+                downgrades += 1
+                
+        print(f'upgrades: {upgrades}')
+        print(f'downgrades: {downgrades}')
+        
+    except:
+        pass
+    
+    response['upgrades'] = upgrades
+    response['downgrades'] = downgrades
+    
+    print(response)
+    browser.quit()
+    
+    return response
 
 
-# *****************************************************************************
-conn.commit()
-
-cursor.close()
-conn.close()
+if __name__ == '__main__':
+    calculate_sentiment()
