@@ -10,16 +10,18 @@ import sentiment
 from config import *
 
 conn = psycopg2.connect(user=PG_USER,
-                 password=PG_PASSWORD,
-                 host=PG_HOST,
-                 port=PG_PORT,
-                 dbname=PG_DATABASE,
-                 )
+                  password=PG_PASSWORD,
+                  host=PG_HOST,
+                  port=PG_PORT,
+                  dbname=PG_DATABASE,
+                  )
 
 cursor = conn.cursor()
 cursor.execute('delete from earnings_sentiment')
 
-browser = webdriver.Chrome()
+options = webdriver.ChromeOptions()
+options.add_argument('--headless')
+browser = webdriver.Chrome(options=options)
 browser.get('https://www.benzinga.com/news/earnings')
 earnings = WebDriverWait(browser, 20).until(EC.presence_of_element_located((By.XPATH, '//*[@id="earnings-calendar"]/div/div[2]/div[1]/div/div[2]/div[2]/div[3]/div[2]/div/div'))).text.split('\n')
 browser.quit()

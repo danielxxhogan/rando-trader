@@ -24,7 +24,7 @@ def calculate_sentiment(ticker='FUV'):
     
     try:
         options = webdriver.ChromeOptions()
-        # options.add_argument('--headless')
+        options.add_argument('--headless')
         browser = webdriver.Chrome(options=options)
         browser.get(f'https://finviz.com/quote.ashx?t={ticker}')
         articles = WebDriverWait(browser, 20).until(EC.presence_of_element_located((By.XPATH, '//*[@id="news-table"]/tbody'))).text
