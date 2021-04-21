@@ -18,6 +18,8 @@ conn = psycopg2.connect(user=PG_USER,
                  )
 
 cursor = conn.cursor()
+cursor.execute('delete from upgrades_sentiment')
+cursor.execute('delete from downgrades_sentiment')
 
 
 # UPGRADES
