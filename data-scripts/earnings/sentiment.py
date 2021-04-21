@@ -76,8 +76,8 @@ def calculate_sentiment(ticker='FUV'):
                     magnitude_scores.append(sentiment.magnitude)
                     sentiment_scores.append(sentiment.score)
                     
-            except:
-                pass
+            except Exception as e:
+                print(e)
             
         
         for i in range(len(today_sentiment_scores)):
@@ -85,8 +85,8 @@ def calculate_sentiment(ticker='FUV'):
                 magnitude = today_magnitude_scores[i] / today_total_magnitude
                 sentiment = today_sentiment_scores[i] * magnitude
                 today_total_sentiment += sentiment
-            except:
-                pass
+            except Exception as e:
+                print(e)
             
         total_magnitude += today_total_magnitude
         magnitude_scores += today_magnitude_scores
@@ -97,15 +97,15 @@ def calculate_sentiment(ticker='FUV'):
                 magnitude = magnitude_scores[i] / total_magnitude
                 sentiment = sentiment_scores[i] * magnitude
                 total_sentiment += sentiment
-            except:
-                pass
+            except Exception as e:
+                print(e)
             
         print(f'articles today: {articles_today} \
                 \ntodays sentiment: {today_total_sentiment} \
                 \noverall sentiment: {total_sentiment}\n')
                 
-    except:
-        pass
+    except Exception as e:
+        print(e)
     
     response['articles'] = articles_today
     response['sentiment'] = total_sentiment
