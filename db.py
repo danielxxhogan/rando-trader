@@ -221,6 +221,16 @@ cursor.execute('create table if not exists insider_trading (it_id serial primary
                                                             owned decimal, \
                                                             change varchar, \
                                                             value decimal)')
+    
+    
+# ----- SHORT INTEREST -----
+# *****************************************************************************
+cursor.execute('create table if not exists short_interest (ticker varchar, \
+                                                           company varchar, \
+                                                           price decimal, \
+                                                           short_interest integer, \
+                                                           float integer, \
+                                                           float_shorted decimal)')
 
 
 # ----- UNIVERSES -----
