@@ -44,7 +44,7 @@ today = today[[column for column in today.columns if column != 'Surprise']]
 
 # *****************************************************************************
 now = dt.datetime.today().strftime('%Y-%m-%d %H:%M:%S')
-today.to_csv(f'morning-earnings-{now}.csv')
+# today.to_csv(f'morning-earnings-{now}.csv')
 
 date = dt.datetime.today().strftime('%Y-%m-%d')
 

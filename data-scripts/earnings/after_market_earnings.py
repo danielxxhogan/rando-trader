@@ -65,7 +65,7 @@ for row in today.values:
     
 after_market = pd.DataFrame(after_market)
 now = dt.datetime.today().strftime('%Y-%m-%d %H:%M:%S')
-after_market.to_csv(f'after_market_earnings-{now}.csv')
+# after_market.to_csv(f'after_market_earnings-{now}.csv')
 
 date = dt.datetime.today().strftime('%Y-%m-%d')
 
