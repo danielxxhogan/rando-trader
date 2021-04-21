@@ -15,6 +15,7 @@ conn = psycopg2.connect(user=PG_USER,
                  )
 
 cursor = conn.cursor()
+cursor.execute('delete from morning_earnings')
 
 options = webdriver.ChromeOptions()
 options.add_argument('--headless')
