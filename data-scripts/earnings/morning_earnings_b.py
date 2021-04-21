@@ -16,7 +16,9 @@ conn = psycopg2.connect(user=PG_USER,
 
 cursor = conn.cursor()
 
-browser = webdriver.Chrome()
+options = webdriver.ChromeOptions()
+options.add_argument('--headless')
+browser = webdriver.Chrome(options=options)
 browser.get('https://www.benzinga.com/news/earnings')
 earnings = WebDriverWait(browser, 100).until(EC.presence_of_element_located((By.XPATH, '//*[@id="earnings-calendar"]/div/div[2]/div[1]/div/div[2]/div[2]/div[3]/div[2]/div/div'))).text.split('\n')
 browser.quit()
