@@ -1,5 +1,6 @@
 import pandas as pd
 import psycopg2
+# from selenium import webdriver
 import datetime as dt
 
 from config import *
@@ -17,6 +18,15 @@ insider_trading = cursor.fetchall()
 
 if len(insider_trading) > 0:
     latest_in_db = insider_trading[-1]
+    
+    
+    
+# browser = webdriver.Chrome()
+# browser.get('https://finviz.com/insidertrading.ashx?tc=1')
+# insider_trading = browser.find_element_by_xpath('/html/body/table[3]/tbody/tr[1]/td/table/tbody/tr[3]/td/table[2]/tbody').text
+# browser.quit()
+
+
 
 current_it = pd.read_html('http://openinsider.com/insider-purchases-25k')[11]
 rm_columns = ['X', '1d', '1w', '1m', '6m']
