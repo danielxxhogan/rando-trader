@@ -2,7 +2,13 @@ Instructions on setting up ec2 instance for data-scripts and bots.
 
 Create new instance and ssh into it.
 
-Install git:  apt-get install git  ||  yum install git
+
+
+
+----- install git, get rando-trader, set date -----
+
+
+Install git:  sudo apt-get install git
 
 git clone https://github.com/rando-mane/rando-trader.git && cd rando-trader
 
@@ -10,6 +16,61 @@ sudo timedatectl set-timezone America/Los_Angeles
 
 copy over all config, credentials, and env files
 
+
+
+
+
+----- Get distutils and pip and install all requirements -----
+
+
+sudo apt-get install python3-distutils
+
+python3 get-pip.py
+
+export PATH="$PATH:/home/ubuntu/.local/bin"
+
+source ~/.profile
+
 sudo pip3 install --upgrade setuptools
 
 sudo pip3 install -r requirements.txt
+
+
+
+
+
+----- install chrome, chromedriver -----
+
+
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+
+sudo apt install ./google-chrome-stable_current_amd64.deb
+
+
+sudo wget https://chromedriver.storage.googleapis.com/90.0.4430.24/chromedriver_linux64.zip
+
+sudo apt install unzip
+
+sudo unzip chromedriver_linux64.zip
+
+sudo mv chromedriver /usr/bin/chromedriver
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
