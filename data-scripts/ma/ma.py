@@ -1,3 +1,13 @@
+# file: ma.py
+# author: Daniel Hogan
+
+# This python script establishes a connection with the database and deletes all
+# the contents of the ma_sentiment table. It then uses selenium to navagiate to
+# the benzinga page for recent mergers and acqusitions. It gets all the tickers
+# for companies with announcements today and feeds each one into the sentiment
+# method which returns a dictionary of data about each ticker. The dictionary
+# data is inserted and commited into the database.
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait

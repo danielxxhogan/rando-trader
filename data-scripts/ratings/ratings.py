@@ -5,8 +5,8 @@
 # the contents of the upgrades_sentiment and downgrades_sentiment tables. It
 # then uses selenium to navigate to the benzinga pages for analyst upgrades and
 # downgrades. It gets all the tickers for the current day and feeds each one
-# through the sentiment function which returns a dictionary of values.These values
-# are then inserted and commited into the database.
+# through the sentiment function which returns a dictionary of data about each
+# ticker. The dictionary data is inserted and commited into the database.
 # *****************************************************************************
 
 from selenium import webdriver
