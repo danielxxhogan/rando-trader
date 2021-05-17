@@ -1,0 +1,6 @@
+requests
+pandas
+psycopg2-binary
+lxml
+selenium
+google-cloud-language
