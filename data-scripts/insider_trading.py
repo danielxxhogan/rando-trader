@@ -1,3 +1,16 @@
+# file: insider_trading.py
+# author: Daniel Hogan
+
+# This python script establishes a connection to the database and deletes all
+# queiries the database for the contents fo the insider_trading table. It then
+# uses the pandas.read_html method to get the table of most recent insider trades
+# from http://openinsider.com/insider-purchases-25k. It then uses a recursive
+# function to loop through the table until it finds the first entry in the table
+# that is already in the db. At that point all the recursive function calls return
+# and each call adds its row to the db. This is done because the data needs to
+# be inserted into the database in the opposite order its retrieved from the table.
+# *****************************************************************************
+
 import pandas as pd
 import psycopg2
 import datetime as dt
