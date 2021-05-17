@@ -4,4 +4,12 @@ Create new instance and ssh into it.
 
 Install git:  apt-get install git  ||  yum install git
 
+git clone https://github.com/rando-mane/rando-trader.git && cd rando-trader
 
+sudo timedatectl set-timezone America/Los_Angeles
+
+copy over all config, credentials, and env files
+
+sudo pip3 install --upgrade setuptools
+
+sudo pip3 install -r requirements.txt
