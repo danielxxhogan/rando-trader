@@ -21,10 +21,8 @@ conn = psycopg2.connect(user=PG_USER,
 cursor = conn.cursor()
 
 
-# EMPY AND RESET
 # *****************************************************************************
-# when the code above runs, all new data is appended to the tables. If too much
-# unused data accumulate delete all tables and repopulate with just most recent
+
 
 # # ----- CONGRESS -----
 cursor.execute('delete from congress')
@@ -45,6 +43,7 @@ for filing in congress_trading:
 
 conn.commit()
 
+
 # # ----- SENATE -----
 cursor.execute('delete from senate')
 
@@ -63,6 +62,7 @@ for filing in senate_trading:
 
 conn.commit()
 
+
 # # ----- HOUSE -----
 cursor.execute('delete from house')
 
@@ -80,6 +80,7 @@ for filing in house_trading:
 
 conn.commit()
 
+
 # # ----- CONTRACTS -----
 cursor.execute('delete from contracts')
 
@@ -96,6 +97,7 @@ for filing in government_contracts:
                     filing['Ticker']))
 
 conn.commit()
+
 
 # # ----- LOBBYING -----
 cursor.execute('delete from lobbying')
