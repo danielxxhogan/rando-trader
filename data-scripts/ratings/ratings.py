@@ -7,6 +7,7 @@
 # downgrades. It gets all the tickers for the current day and feeds each one
 # through the sentiment function which returns a dictionary of values.These values
 # are then inserted and commited into the database.
+# *****************************************************************************
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
