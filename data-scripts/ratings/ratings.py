@@ -1,3 +1,13 @@
+# file: ratings.py
+# author: Daniel Hogan
+
+# This python script establishes a connection with the database and deletes all
+# the contents of the upgrades_sentiment and downgrades_sentiment tables. It
+# then uses selenium to navigate to the benzinga pages for analyst upgrades and
+# downgrades. It gets all the tickers for the current day and feeds each one
+# through the sentiment function which returns a dictionary of values.These values
+# are then inserted and commited into the database.
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
