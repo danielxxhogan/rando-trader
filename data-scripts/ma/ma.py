@@ -7,6 +7,7 @@
 # for companies with announcements today and feeds each one into the sentiment
 # method which returns a dictionary of data about each ticker. The dictionary
 # data is inserted and commited into the database.
+# *****************************************************************************
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
