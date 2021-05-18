@@ -2,7 +2,7 @@
 # author: Daniel Hogan
 
 # This python script establishes a connection to the database and deletes all
-# queiries the database for the contents fo the insider_trading table. It then
+# the contents of the insider_trading table. It then
 # uses the pandas.read_html method to get the table of most recent insider trades
 # from http://openinsider.com/insider-purchases-25k. It then uses a recursive
 # function to loop through the table until it finds the first entry in the table

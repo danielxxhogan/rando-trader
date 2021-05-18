@@ -2,7 +2,7 @@
 # author: Daniel Hogan
 
 # This python script establishes a connection to the database and deletes all
-# queiries the database for the contents of the congress, senate, house, contracts,
+# the contents of the congress, senate, house, contracts,
 # and lobbying tables. It makes an api request to all 5 api endpoints of the
 # quiver quant api for all the most recent accounts of either politicians purchasing
 # stocks, companies getting a government contract, or companies spending money

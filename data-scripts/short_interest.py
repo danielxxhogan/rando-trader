@@ -1,3 +1,13 @@
+# file: short_interest.py
+# author: Daniel Hogan
+
+# This python script establishes a connection to the database and deletes all
+# the contents of the short_interest table. It then uses pandas.read_html to get
+# all the tables from https://www.marketwatch.com/tools/screener/short-interest?mod=side_nav.
+# It finds the table with all tickers with the highest percentage of short interest
+# and inserts and commits this data to the database.
+# *****************************************************************************
+
 import pandas as pd
 import psycopg2
 
