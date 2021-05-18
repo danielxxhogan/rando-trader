@@ -25,6 +25,12 @@ earnings = WebDriverWait(browser, 100).until(EC.presence_of_element_located((By.
 browser.quit()
 
 for i in range(0, len(earnings), 11):
+    print(earnings[i])
+    
+    # right here I need to use a regular expression to check for a date. This
+    # will be used to determine the start of a new record. Copy the form I used
+    # in earnings_sentiment.
+    
     if earnings[i+2] == 'PM' and earnings[i+6] != '-' and earnings[i+7] != '-':
         print(earnings[i+3])
         
