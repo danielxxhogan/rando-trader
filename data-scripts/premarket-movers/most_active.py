@@ -1,3 +1,13 @@
+# file: most_active.py
+# author: Daniel Hogan
+
+# This python script establishes a connection to the database and deletes all
+# the contents of the most_active table. It then uses pandas.read_html to get
+# all the tables from https://www.marketwatch.com/tools/screener/premarket?mod=side_nav,
+# finds the one with data about all the most active stocks premarket and inserts
+# and commits the data to the database.
+# *****************************************************************************
+
 import requests
 import psycopg2
 import pandas as pd

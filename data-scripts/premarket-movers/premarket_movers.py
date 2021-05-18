@@ -1,3 +1,14 @@
+# file: premarket_movers.py
+# author: Daniel Hogan
+
+# This python script establishes a connection to the database and deletes all
+# the contents of the premarket_gainers and premarket_losers tables. It then
+# uses requests to get the html for https://www.benzinga.com/premarket/. then
+# it uses BeautifulSoup to parse the html and get the data for all the tickers
+# listed on the site. It inserts and commits the premarket gainers and premarket
+# losers data to the premarket_gainers and premarket_losers tables.
+# *****************************************************************************
+
 import requests
 from bs4 import BeautifulSoup
 import psycopg2

@@ -1,3 +1,14 @@
+# file: premarket_sentiment.py
+# author: Daniel Hogan
+
+# This python script establishes a connection to the database and deletes all
+# the contents of the premarket_sentiment table. It then queries the database
+# for all the tickers in the premarket_gainers, premarket_losers, and most_active
+# tables. It feeds each one into the sentiment.py function which returns a dictionary
+# of data about that ticker. The dictionary data is inserted and commited into
+# the database.
+# *****************************************************************************
+
 import psycopg2
 import sentiment
 
