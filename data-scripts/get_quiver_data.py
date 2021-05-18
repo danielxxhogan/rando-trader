@@ -1,3 +1,15 @@
+# file: get_quiver_data.py
+# author: Daniel Hogan
+
+# This python script establishes a connection to the database and deletes all
+# queiries the database for the contents of the congress, senate, house, contracts,
+# and lobbying tables. It makes an api request to all 5 api endpoints of the
+# quiver quant api for all the most recent accounts of either politicians purchasing
+# stocks, companies getting a government contract, or companies spending money
+# on lobbying. All this data is inserted and commited to the database.
+# *****************************************************************************
+
+
 import requests
 import pandas as pd
 import datetime as dt
