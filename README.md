@@ -21,7 +21,6 @@ When the site is visited, data from the db is retrieved and displayed in the bro
 Create new instance and ssh into it.  
 
 <br />
-<br />
 
 ----- install git, get rando-trader, set date -----  
 
