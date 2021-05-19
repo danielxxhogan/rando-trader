@@ -76,40 +76,40 @@ crontab -e
 
 
 \# GET LATEST INSIDER BUYS AND APPEND TO INSIDER_TRADING TABLE<br />
-0 1 * * * cd ~/rando-trader/data-scripts && python3 insider_trading.py  
+0 1 * * * cd ~/rando-trader/data-scripts && python3 insider_trading.py<br />
 
 
 \# GET ALL CURRENT DATA FROM ALL QUIVER QUANT API ENDPOINTS AND UPDATE CORRESPONDING TABLES<br />
-5 1 * * * cd ~/rando-trader/data-scripts && python3 get_quiver_data.py  
+5 1 * * * cd ~/rando-trader/data-scripts && python3 get_quiver_data.py<br />
 
 
 \# GET ALL STOCKS WITH THE HIGHEST SHORT INTEREST<br />
-10 1 * * * cd ~rando-trader/data-scripts && python3 short_interest.py  
+10 1 * * * cd ~rando-trader/data-scripts && python3 short_interest.py<br />
 
 
 \# GET AM EARNINGS IN THE MORNING, GET PM EARNINGS IN THE AFTERNOON, GET EARNINGS SENTIMENT SHORTLY BEFORE MARKET CLOSE<br />
-25 6 * * 1-5 cd ~/rando-trader/data-scripts/earnings && python3 morning_earnings_b.py
-0 17 * * 1-5 cd ~/rando-trader/data-scripts/earnings && python3 after_market_earnings_b.py
-55 12 * * 1-5 cd ~/rando-trader/data-scripts/earnings && export GOOGLE_APPLICATION_CREDENTIALS=credentials.json && python3 earnings_sentiment.py  
+25 6 * * 1-5 cd ~/rando-trader/data-scripts/earnings && python3 morning_earnings_b.py<br />
+0 17 * * 1-5 cd ~/rando-trader/data-scripts/earnings && python3 after_market_earnings_b.py<br />
+55 12 * * 1-5 cd ~/rando-trader/data-scripts/earnings && export GOOGLE_APPLICATION_CREDENTIALS=credentials.json && python3 earnings_sentiment.py<br />
 
 
 \# GET ALL TICKERS WITH M&A ANNOUNCEMENTS, PASS EACH TO SENTIMENTY.PY AND STORE RESULTS TO MA_SENTIMENT TABLE<br />
-0 8 * * * cd ~/rando-trader/data-scripts/ma && export GOOGLE_APPLICATION_CREDENTIALS=credentials.json && python3 ma.py  
+0 8 * * * cd ~/rando-trader/data-scripts/ma && export GOOGLE_APPLICATION_CREDENTIALS=credentials.json && python3 ma.py<br />
 
 
 \# GET ALL TICKERS WITH ANALYST UPGRAGES OR DOWNGRADES FOR THE CURRENT DAY<br />
-10 8 * * * cd ~/rando-trader/data-scripts/ratings && export GOOGLE_APPLICATION_CREDENTIALS=credentials.json && python3 ratings.py  
+10 8 * * * cd ~/rando-trader/data-scripts/ratings && export GOOGLE_APPLICATION_CREDENTIALS=credentials.json && python3 ratings.py<br />
 
 
 \# GET PREMARKET GAINERS, LOSERS, AND MOST ACTIVE<br />
-20 6 * * 1-5 cd ~/rando-trader/data-scripts/premarket-movers && python3 premarket_movers.py
-21 6 * * 1-5 cd ~/rando-trader/data-scripts/premarket-movers && python3 most_active.py
-22 6 * * 1-5 cd ~/rando-trader/data-scripts/premarket-movers && export GOOGLE_APPLICATION_CREDENTIALS=credentials.json && python3 premarket_sentiment.py  
+20 6 * * 1-5 cd ~/rando-trader/data-scripts/premarket-movers && python3 premarket_movers.py<br />
+21 6 * * 1-5 cd ~/rando-trader/data-scripts/premarket-movers && python3 most_active.py<br />
+22 6 * * 1-5 cd ~/rando-trader/data-scripts/premarket-movers && export GOOGLE_APPLICATION_CREDENTIALS=credentials.json && python3 premarket_sentiment.py<br />
 
 
 \# STOCK UNIVERSES<br />
-00 2 * * 1-5 cd ~/rando-trader/data-scripts/screeners && python3 broad_universe.py
-10 2 * * 1-5 cd ~/rando-trader/data-scripts/screeners && python3 heavily_traded.py.py
-20 2 * * 1-5 cd ~/rando-trader/data-scripts/screeners && python3 high_rvol.py.py
-30 2 * * 1-5 cd ~/rando-trader/data-scripts/screeners && python3 high_score.py.py
+00 2 * * 1-5 cd ~/rando-trader/data-scripts/screeners && python3 broad_universe.py<br />
+10 2 * * 1-5 cd ~/rando-trader/data-scripts/screeners && python3 heavily_traded.py.py<br />
+20 2 * * 1-5 cd ~/rando-trader/data-scripts/screeners && python3 high_rvol.py.py<br />
+30 2 * * 1-5 cd ~/rando-trader/data-scripts/screeners && python3 high_score.py.py<br />
 
