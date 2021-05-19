@@ -10,18 +10,18 @@ The second part is a series of trading algorithms that retrieve universes of sto
 accordingly by connecting to the broker api. The broker I use is Alpaca.
 
 The third part is the Rando-Trader dashboard which is a React/Express application hosted on Digital Ocean and accessible at rando-trader.com.
-When the site is visited, data from the db is retrieved and displayed in the browser, and it also supports search functionality.
+When the site is visited, data from the db is retrieved and displayed in the browser, and it also supports search functionality.  
 
 
 
-Instructions on setting up ec2 instance for data-scripts and bots.
+# Instructions on setting up ec2 instance for data-scripts and bots.
 
-Create new instance and ssh into it.
-
-
+Create new instance and ssh into it.  
 
 
------ install git, get rando-trader, set date -----
+
+
+----- install git, get rando-trader, set date -----  
 
 
 Install git:  sudo apt-get install git
@@ -30,13 +30,13 @@ git clone https://github.com/rando-mane/rando-trader.git && cd rando-trader
 
 sudo timedatectl set-timezone America/Los_Angeles
 
-copy over all config, credentials, and env files
+copy over all config, credentials, and env files  
 
 
 
 
 
------ Get distutils and pip and install all requirements -----
+----- Get distutils and pip and install all requirements -----  
 
 
 sudo apt-get install python3-distutils
@@ -47,13 +47,13 @@ export PATH="$PATH:/home/ubuntu/.local/bin"
 
 source ~/.profile
 
-sudo pip3 install -r requirements.txt
+sudo pip3 install -r requirements.txt  
 
 
 
 
 
------ install chrome, chromedriver -----
+----- install chrome, chromedriver -----  
 
 
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -67,47 +67,47 @@ sudo apt install unzip
 
 sudo unzip chromedriver_linux64.zip
 
-sudo mv chromedriver /usr/bin/chromedriver
+sudo mv chromedriver /usr/bin/chromedriver  
 
 
 
------ setup cronjob -----
+----- setup cronjob -----  
 
 sudo service cron start
 
-crontab -e
+crontab -e  
 
 
 \# GET LATEST INSIDER BUYS AND APPEND TO INSIDER_TRADING TABLE
-0 1 * * * cd ~/rando-trader/data-scripts && python3 insider_trading.py
+0 1 * * * cd ~/rando-trader/data-scripts && python3 insider_trading.py  
 
 
 \# GET ALL CURRENT DATA FROM ALL QUIVER QUANT API ENDPOINTS AND UPDATE CORRESPONDING TABLES
-5 1 * * * cd ~/rando-trader/data-scripts && python3 get_quiver_data.py
+5 1 * * * cd ~/rando-trader/data-scripts && python3 get_quiver_data.py  
 
 
 \# GET ALL STOCKS WITH THE HIGHEST SHORT INTEREST
-10 1 * * * cd ~rando-trader/data-scripts && python3 short_interest.py
+10 1 * * * cd ~rando-trader/data-scripts && python3 short_interest.py  
 
 
 \# GET AM EARNINGS IN THE MORNING, GET PM EARNINGS IN THE AFTERNOON, GET EARNINGS SENTIMENT SHORTLY BEFORE MARKET CLOSE
 25 6 * * 1-5 cd ~/rando-trader/data-scripts/earnings && python3 morning_earnings_b.py
 0 17 * * 1-5 cd ~/rando-trader/data-scripts/earnings && python3 after_market_earnings_b.py
-55 12 * * 1-5 cd ~/rando-trader/data-scripts/earnings && export GOOGLE_APPLICATION_CREDENTIALS=credentials.json && python3 earnings_sentiment.py
+55 12 * * 1-5 cd ~/rando-trader/data-scripts/earnings && export GOOGLE_APPLICATION_CREDENTIALS=credentials.json && python3 earnings_sentiment.py  
 
 
 \# GET ALL TICKERS WITH M&A ANNOUNCEMENTS, PASS EACH TO SENTIMENTY.PY AND STORE RESULTS TO MA_SENTIMENT TABLE
-0 8 * * * cd ~/rando-trader/data-scripts/ma && export GOOGLE_APPLICATION_CREDENTIALS=credentials.json && python3 ma.py
+0 8 * * * cd ~/rando-trader/data-scripts/ma && export GOOGLE_APPLICATION_CREDENTIALS=credentials.json && python3 ma.py  
 
 
 \# GET ALL TICKERS WITH ANALYST UPGRAGES OR DOWNGRADES FOR THE CURRENT DAY
-10 8 * * * cd ~/rando-trader/data-scripts/ratings && export GOOGLE_APPLICATION_CREDENTIALS=credentials.json && python3 ratings.py
+10 8 * * * cd ~/rando-trader/data-scripts/ratings && export GOOGLE_APPLICATION_CREDENTIALS=credentials.json && python3 ratings.py  
 
 
 \# GET PREMARKET GAINERS, LOSERS, AND MOST ACTIVE
 20 6 * * 1-5 cd ~/rando-trader/data-scripts/premarket-movers && python3 premarket_movers.py
 21 6 * * 1-5 cd ~/rando-trader/data-scripts/premarket-movers && python3 most_active.py
-22 6 * * 1-5 cd ~/rando-trader/data-scripts/premarket-movers && export GOOGLE_APPLICATION_CREDENTIALS=credentials.json && python3 premarket_sentiment.py
+22 6 * * 1-5 cd ~/rando-trader/data-scripts/premarket-movers && export GOOGLE_APPLICATION_CREDENTIALS=credentials.json && python3 premarket_sentiment.py  
 
 
 \# STOCK UNIVERSES
