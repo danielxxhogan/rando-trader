@@ -13,7 +13,8 @@ The third part is the Rando-Trader dashboard which is a React/Express applicatio
 When the site is visited, data from the db is retrieved and displayed in the browser, and it also supports search functionality.  
 
 
-
+<br />
+<br />
 # Instructions on setting up ec2 instance for data-scripts and bots.
 
 Create new instance and ssh into it.  
