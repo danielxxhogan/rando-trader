@@ -1,4 +1,4 @@
-# rando-trader
+# Rando-Trader
 Full stack trading platform, has a python automated backend for collecting data and trading bots, and a react/express frontend dashboard.
 
 Rando-Trader is a full stack trading platform I built for myself. There are three main parts:
