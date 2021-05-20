@@ -79,18 +79,14 @@ sudo apt-get install manpages-dev
 gcc --version
 
 
-tar -zxvf ta-lib-0.4.0-src.tar.gz
 
-cd ta-lib
+unzip mrjbq7-ta-lib-TA_Lib-0.4.20-0-g95b4f80.zip
 
-./configure --prefix=/usr
+cd mrjbq7-ta-lib-95b4f80
 
-make
+sudo apt-get install python3-dev
 
-sudo make install
-
-
-
+sudo python3 setup.py install
 
 <br />
 <br />
