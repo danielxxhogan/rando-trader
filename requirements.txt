@@ -4,3 +4,4 @@ psycopg2-binary
 lxml
 selenium
 google-cloud-language
+alpaca-trade-api
