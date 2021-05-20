@@ -6,3 +6,4 @@ package-lock.json
 *.csv
 *.log
 credentials.json
+ta-lib
