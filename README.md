@@ -68,7 +68,34 @@ sudo mv chromedriver /usr/bin/chromedriver
 <br />
 <br />
 
------ setup cronjob -----  
+----- install talib -----
+
+sudo apt update
+
+sudo apt install build-essential
+
+sudo apt-get install manpages-dev
+
+gcc --version
+
+
+tar -zxvf ta-lib-0.4.0-src.tar.gz
+
+cd ta-lib
+
+./configure --prefix=/usr
+
+make
+
+sudo make install
+
+
+
+
+<br />
+<br />
+
+----- setup cronjob -----
 
 sudo service cron start
 
