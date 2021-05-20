@@ -45,7 +45,7 @@ export PATH="$PATH:/home/ubuntu/.local/bin"
 
 source ~/.profile
 
-sudo pip3 install -r requirements.txt  
+pip3 install -r requirements.txt  
 
 <br />
 <br />
