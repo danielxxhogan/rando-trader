@@ -86,6 +86,8 @@ cd mrjbq7-ta-lib-95b4f80
 
 sudo apt-get install python3-dev
 
+sudo python3 setup.py install
+
 <br />
 <br />
 
