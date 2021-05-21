@@ -148,7 +148,9 @@ crontab -e
 ----- commands to run a production flask server -----
 
 export FLASK_APP=index.py
+
 export FLASK_ENV=development
+
 flask run
 
 
