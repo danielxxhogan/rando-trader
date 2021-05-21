@@ -1,6 +1,6 @@
 # Rando-Trader
 
-Rando-Trader is a full stack trading web app I built for myself. There are three main parts:
+Rando-Trader is a full stack trading web app. There are three main parts:
 
 The first part is a series of python scripts that use a combination of web scraping and api requests to collect financial data and
 store it to a postgres db hosted on RDS. The scripts are executed on an ec2 instance using cronjob and the db is updated periodically.
