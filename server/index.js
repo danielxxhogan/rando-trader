@@ -4,8 +4,9 @@ const cors = require('cors');
 const app = express();
 app.use(cors());
 
-PORT = process.env.PORT || 3002;
+PORT = process.env.PORT || 3004;
 
+app.use('/home', require('./routes/home'))
 app.use('/search', require('./routes/search'));
 
 

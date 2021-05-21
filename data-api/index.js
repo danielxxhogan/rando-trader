@@ -1,22 +1,26 @@
 const express = require('express');
-const pool = require('db');
+const pool = require('./db');
+const cors = require('cors');
 
 const app = express();
+app.use(cors());
 
 PORT = process.env.PORT || 3002;
 
 // *****************************************************************************
-app.get('/premarket-gainers', async (res, req) => {
+app.get('/premarket-gainers', async (req, res) => {
 
   // this endpoint queries the database for all the contents of the premarket_gainers table
 
   try {
     const response = await pool.query('select * from premarket_gainers')
-    console.log(response);
-    res.json(response);
+    console.log(response.rows);
+    res.json(response.rows);
+
 
   } catch (err) {
     console.log(err.message);
+    res.status(500).json('data Server Error');
   }
 })
 

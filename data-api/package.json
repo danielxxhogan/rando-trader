@@ -9,8 +9,10 @@
   "author": "Daniel Hogan",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "pg": "^8.6.0"
   }
 }
