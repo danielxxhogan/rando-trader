@@ -136,3 +136,27 @@ crontab -e
 20 2 * * 1-5 cd ~/rando-trader/data-scripts/screeners && python3 high_rvol.py.py<br />
 30 2 * * 1-5 cd ~/rando-trader/data-scripts/screeners && python3 high_score.py.py<br />
 
+<br />
+<br />
+<br />
+<br />
+
+# Instructions on setting up ec2 instance for data-api and sentiment-api
+
+<br />
+
+----- commands to run a production flask server -----
+
+export FLASK_APP=index.py
+
+export FLASK_ENV=development
+
+flask run
+
+
+
+
+
+
+
+
