@@ -18,11 +18,11 @@ import datetime as dt
 from config import *
 
 conn = psycopg2.connect(user=PG_USER,
-                 password=PG_PASSWORD,
-                 host=PG_HOST,
-                 port=PG_PORT,
-                 dbname=PG_DATABASE,
-                 )
+                        password=PG_PASSWORD,
+                        host=PG_HOST,
+                        port=PG_PORT,
+                        dbname=PG_DATABASE,
+                        )
 
 cursor = conn.cursor()
 cursor.execute('select * from insider_trading')
