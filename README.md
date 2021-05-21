@@ -155,6 +155,27 @@ flask run
 
 
 
+----- commands for express data api -----
+
+cd rando-trader/data-api
+
+npm i
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
