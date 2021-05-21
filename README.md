@@ -141,7 +141,7 @@ crontab -e
 <br />
 <br />
 
-# Instructions on setting up ec2 instance for data-api and sentiment-api
+# Instructions on setting up ec2 instance for sentiment-api
 
 <br />
 
@@ -153,11 +153,18 @@ export FLASK_ENV=development
 
 flask run
 
+<br />
+<br />
 
+# Instructions on setting up ec2 instance for data-api
 
------ commands for express data api -----
+<br />
 
-cd rando-trader/data-api
+----- install node/npm, dependancies -----
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+
+nvm install node
 
 npm i
 
