@@ -1,0 +1,11 @@
+{
+  "name": "data-api",
+  "version": "1.0.0",
+  "description": "express api hosted on ec2 for querying sw db on rds",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Daniel Hogan",
+  "license": "ISC"
+}
