@@ -38,6 +38,21 @@ app.get('/premarket-losers', async (req, res) => {
   }
 })
 
+app.get('/most-active', async (req, res) => {
+
+  // this endpoint queries the database for all the contents of the most_active table
+
+  try {
+    const response = await pool.query('select * from most_active')
+    console.log(response.rows);
+    res.json(response.rows);
+
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json('data Server Error');
+  }
+})
+
 
 
 app.get('*', (req, res) => {
