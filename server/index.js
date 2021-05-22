@@ -1,8 +1,10 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 app.use(cors());
+app.use(express.static(path.join(__dirname, '../dashboard/build')));
 
 PORT = process.env.PORT || 3004;
 

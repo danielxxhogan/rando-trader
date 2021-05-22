@@ -8,35 +8,35 @@ const Home = () => {
   const [shortInterest, setShortInterest] = useState();
 
   const getPremarketGainers = async () => {
-    const response = await fetch('http://localhost:3004/home/premarket-gainers');
+    const response = await fetch('/home/premarket-gainers');
     const parseRes = await response.json();
     setPremarketGainers(parseRes);
   }
   useEffect(() => { getPremarketGainers(); },[])
 
   const getPremarketLosers = async () => {
-    const response = await fetch('http://localhost:3004/home/premarket-losers');
+    const response = await fetch('/home/premarket-losers');
     const parseRes = await response.json();
     setPremarketLosers(parseRes);
   }
   useEffect(() => { getPremarketLosers(); },[])
 
   const getMostActive = async () => {
-    const response = await fetch('http://localhost:3004/home/most-active');
+    const response = await fetch('/home/most-active');
     const parseRes = await response.json();
     setMostActive(parseRes);
   }
   useEffect(() => { getMostActive(); },[])
 
   const getInsiderTrading = async () => {
-    const response = await fetch('http://localhost:3004/home/insider-trading');
+    const response = await fetch('/home/insider-trading');
     const parseRes = await response.json();
     setInsiderTrading(parseRes);
   }
   useEffect(() => { getInsiderTrading(); },[])
 
   const getShortInterest = async () => {
-    const response = await fetch('http://localhost:3004/home/short-interest');
+    const response = await fetch('/home/short-interest');
     const parseRes = await response.json();
     setShortInterest(parseRes);
   }
@@ -59,6 +59,8 @@ const Home = () => {
 
 
   return <>
+    <h1 id='title'>Rando-Trader</h1>
+
     <h1>Home</h1>
 
     <h2>Premarket Gainers</h2>
