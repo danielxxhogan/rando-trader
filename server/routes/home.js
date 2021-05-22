@@ -6,10 +6,18 @@ router.get('/premarket-gainers', async (req, res) => {
     // res.json('hi');
     console.log('here');
     // const response = await fetch('https://localhost:3002/premarket-gainers');
-    const response = request('http://54.157.199.149:3002/premarket-gainers', (err, reqres) => {
+    request('http://54.157.199.149:3002/premarket-gainers', (err, reqres) => {
       if (err) return console.error(err.message);
 
+      // const parseRes = reqres.json();
+      // console.log(parseRes);
+      // console.log(parseRes.body);
+      // console.log(typeof parseRes);
+
+      console.log(typeof reqres);
+      console.log(reqres);
       console.log(reqres.body);
+      console.log(typeof reqres.body);
       res.json(reqres.body)
 
     });
