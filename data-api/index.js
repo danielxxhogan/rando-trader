@@ -53,6 +53,36 @@ app.get('/most-active', async (req, res) => {
   }
 })
 
+app.get('/insider-trading', async (req, res) => {
+
+  // this endpoint queries the database for all the contents of the insider_trading table
+
+  try {
+    const response = await pool.query('select * from insider_trading')
+    console.log(response.rows);
+    res.json(response.rows);
+
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json('data Server Error');
+  }
+})
+
+app.get('/short-interest', async (req, res) => {
+
+  // this endpoint queries the database for all the contents of the short_interest table
+
+  try {
+    const response = await pool.query('select * from short_interest')
+    console.log(response.rows);
+    res.json(response.rows);
+
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json('data Server Error');
+  }
+})
+
 
 
 app.get('*', (req, res) => {

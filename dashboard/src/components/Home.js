@@ -4,6 +4,8 @@ const Home = () => {
   const [premarketGainers, setPremarketGainers] = useState();
   const [premarketLosers, setPremarketLosers] = useState();
   const [mostActive, setMostActive] = useState();
+  const [insiderTrading, setInsiderTrading] = useState();
+  const [shortInterest, setShortInterest] = useState();
 
   const getPremarketGainers = async () => {
     const response = await fetch('http://localhost:3004/home/premarket-gainers');
@@ -26,6 +28,20 @@ const Home = () => {
   }
   useEffect(() => { getMostActive(); },[])
 
+  const getInsiderTrading = async () => {
+    const response = await fetch('http://localhost:3004/home/insider-trading');
+    const parseRes = await response.json();
+    setInsiderTrading(parseRes);
+  }
+  useEffect(() => { getInsiderTrading(); },[])
+
+  const getShortInterest = async () => {
+    const response = await fetch('http://localhost:3004/home/short-interest');
+    const parseRes = await response.json();
+    setShortInterest(parseRes);
+  }
+  useEffect(() => { getShortInterest(); },[])
+
 
 
 
@@ -45,16 +61,33 @@ const Home = () => {
   return <>
     <h1>Home</h1>
 
+    <h2>Premarket Gainers</h2>
     <table>
       {premarketGainers && premarketGainers.map(row => { return makeTableRow(row) })}
     </table>
+
     <hr />
+    <h2>Premarket Losers</h2>
     <table>
     {premarketLosers && premarketLosers.map(row => { return makeTableRow(row) })}
     </table>
+
     <hr />
+    <h2>Most Active</h2>
     <table>
     {mostActive && mostActive.map(row => { return makeTableRow(row) })}
+    </table>
+
+    <hr />
+    <h2>Insider Trading</h2>
+    <table>
+    {insiderTrading && insiderTrading.map(row => { return makeTableRow(row) })}
+    </table>
+
+    <hr />
+    <h2>Short Interest</h2>
+    <table>
+    {shortInterest && shortInterest.map(row => { return makeTableRow(row) })}
     </table>
   </>
 

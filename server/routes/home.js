@@ -46,4 +46,34 @@ router.get('/most-active', async (req, res) => {
   }
 })
 
+router.get('/insider-trading', async (req, res) => {
+  try {
+    request('http://54.157.199.149:3002/insider-trading', (err, reqres) => {
+      if (err) return console.error(err.message);
+
+      const parseRes = JSON.parse(reqres.body);
+      res.json(parseRes);
+    });
+
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json('Server Error');
+  }
+})
+
+router.get('/short-interest', async (req, res) => {
+  try {
+    request('http://54.157.199.149:3002/short-interest', (err, reqres) => {
+      if (err) return console.error(err.message);
+
+      const parseRes = JSON.parse(reqres.body);
+      res.json(parseRes);
+    });
+
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json('Server Error');
+  }
+})
+
 module.exports = router;
