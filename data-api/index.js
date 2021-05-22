@@ -23,7 +23,7 @@ app.get('/premarket-gainers', async (req, res) => {
   }
 })
 
-app.get('/premarket-gainers', async (req, res) => {
+app.get('/premarket-losers', async (req, res) => {
 
   // this endpoint queries the database for all the contents of the premarket_losers table
 
