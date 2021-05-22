@@ -14,15 +14,31 @@ app.get('/premarket-gainers', async (req, res) => {
 
   try {
     const response = await pool.query('select * from premarket_gainers')
-    console.log(response.rows[0]);
-    res.send(response.rows);
-
+    console.log(response.rows);
+    res.json(response.rows);
 
   } catch (err) {
     console.log(err.message);
     res.status(500).json('data Server Error');
   }
 })
+
+app.get('/premarket-gainers', async (req, res) => {
+
+  // this endpoint queries the database for all the contents of the premarket_losers table
+
+  try {
+    const response = await pool.query('select * from premarket_losers')
+    console.log(response.rows);
+    res.json(response.rows);
+
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json('data Server Error');
+  }
+})
+
+
 
 app.get('*', (req, res) => {
   res.status(404).send('Thats not a recognized endpoint');
