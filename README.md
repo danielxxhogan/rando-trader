@@ -164,9 +164,39 @@ flask run
 
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 
+RESTART TERMINAL
+
 nvm install node
 
 npm i
+
+<br />
+<br />
+
+# Instructions on setting up Digital Ocean instance for server and dashboard.
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+
+RESTART TERMINAL
+
+nvm install node
+
+cd ~/rando-trader/dashboard
+
+npm i
+
+npm run build
+
+cd ~/rando-trader/server
+
+npm i
+
+node index.js
+
+
+
+
+
 
 
 
