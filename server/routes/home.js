@@ -9,16 +9,21 @@ router.get('/premarket-gainers', async (req, res) => {
     request('http://54.157.199.149:3002/premarket-gainers', (err, reqres) => {
       if (err) return console.error(err.message);
 
+      console.log(reqres.body);
+
+      const parseRes = JSON.stringify(reqres.body);
+      console.log(parseRes);
+
       // const parseRes = reqres.json();
       // console.log(parseRes);
       // console.log(parseRes.body);
       // console.log(typeof parseRes);
 
-      console.log(typeof reqres);
-      console.log(reqres);
-      console.log(reqres.body);
-      console.log(typeof reqres.body);
-      res.json(reqres.body)
+      // console.log(typeof reqres);
+      // console.log(reqres);
+      // console.log(reqres.body);
+      // console.log(typeof reqres.body);
+      res.json(parseRes);
 
     });
 

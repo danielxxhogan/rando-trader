@@ -14,7 +14,7 @@ app.get('/premarket-gainers', async (req, res) => {
 
   try {
     const response = await pool.query('select * from premarket_gainers')
-    console.log(response.rows);
+    console.log(response.rows[0]);
     res.send(response.rows);
 
 

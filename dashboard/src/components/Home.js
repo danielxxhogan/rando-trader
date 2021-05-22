@@ -5,9 +5,21 @@ const Home = () => {
 
   const getPremarketGainers = async () => {
     const response = await fetch('http://localhost:3004/home/premarket-gainers');
+    console.log(response);
+    console.log(typeof response);
+
     const parseRes = await response.json();
     console.log(parseRes);
+    // console.log(parseRes.body);
     console.log(typeof parseRes);
+
+    const parseRes2 = JSON.stringify(parseRes)
+    console.log(parseRes2);
+    console.log(parseRes2.body);
+    console.log(typeof parseRes2);
+
+    // console.log(typeof parseRes);
+    // parseRes = JSON.stringify(parseRes)
     setPremarketGainers(parseRes);
   }
   useEffect(() => { getPremarketGainers(); })
