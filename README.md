@@ -168,7 +168,11 @@ RESTART TERMINAL
 
 nvm install node
 
+cd ~/rando-trader/data-api
+
 npm i
+
+node index.js
 
 <br />
 <br />
