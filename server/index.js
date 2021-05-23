@@ -13,7 +13,7 @@ app.use('/search', require('./routes/search'));
 
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './client/build/index.html'));
+  res.sendFile(path.join(__dirname, '../dashboard/build/index.html'));
 })
 
 app.listen(PORT, () => {
