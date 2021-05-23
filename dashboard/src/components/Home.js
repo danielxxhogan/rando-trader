@@ -6,6 +6,11 @@ const Home = () => {
   const [mostActive, setMostActive] = useState();
   const [insiderTrading, setInsiderTrading] = useState();
   const [shortInterest, setShortInterest] = useState();
+  const [contracts, setContracts] = useState();
+  const [lobbying, setLobbying] = useState();
+  const [congress, setCongress] = useState();
+  const [senate, setSenate] = useState();
+  const [house, setHouse] = useState();
 
   const getPremarketGainers = async () => {
     const response = await fetch('/home/premarket-gainers');
@@ -41,6 +46,41 @@ const Home = () => {
     setShortInterest(parseRes);
   }
   useEffect(() => { getShortInterest(); },[])
+
+  const getContracts = async () => {
+    const response = await fetch('/home/contracts');
+    const parseRes = await response.json();
+    setContracts(parseRes);
+  }
+  useEffect(() => { getContracts(); },[])
+
+  const getLobbying = async () => {
+    const response = await fetch('/home/lobbying');
+    const parseRes = await response.json();
+    setLobbying(parseRes);
+  }
+  useEffect(() => { getLobbying(); },[])
+
+  const getCongress = async () => {
+    const response = await fetch('/home/congress');
+    const parseRes = await response.json();
+    setCongress(parseRes);
+  }
+  useEffect(() => { getCongress(); },[])
+
+  const getSenate = async () => {
+    const response = await fetch('/home/senate');
+    const parseRes = await response.json();
+    setSenate(parseRes);
+  }
+  useEffect(() => { getSenate(); },[])
+
+  const getHouse = async () => {
+    const response = await fetch('/home/house');
+    const parseRes = await response.json();
+    setHouse(parseRes);
+  }
+  useEffect(() => { getHouse(); },[])
 
 
 
@@ -91,6 +131,37 @@ const Home = () => {
     <table>
     {shortInterest && shortInterest.map(row => { return makeTableRow(row) })}
     </table>
+
+    <hr />
+    <h2>Government Contracts</h2>
+    <table>
+    {contracts && contracts.map(row => { return makeTableRow(row) })}
+    </table>
+
+    <hr />
+    <h2>Corporate Lobbying</h2>
+    <table>
+    {lobbying && lobbying.map(row => { return makeTableRow(row) })}
+    </table>
+
+    <hr />
+    <h2>Congress Trades</h2>
+    <table>
+    {congress && congress.map(row => { return makeTableRow(row) })}
+    </table>
+
+    <hr />
+    <h2>Senate Trades</h2>
+    <table>
+    {senate && senate.map(row => { return makeTableRow(row) })}
+    </table>
+
+    <hr />
+    <h2>House Trades</h2>
+    <table>
+    {house && house.map(row => { return makeTableRow(row) })}
+    </table>
+
   </>
 
 }

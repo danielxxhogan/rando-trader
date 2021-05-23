@@ -14,7 +14,6 @@ app.get('/premarket-gainers', async (req, res) => {
 
   try {
     const response = await pool.query('select * from premarket_gainers')
-    console.log(response.rows);
     res.json(response.rows);
 
   } catch (err) {
@@ -29,7 +28,6 @@ app.get('/premarket-losers', async (req, res) => {
 
   try {
     const response = await pool.query('select * from premarket_losers')
-    console.log(response.rows);
     res.json(response.rows);
 
   } catch (err) {
@@ -44,7 +42,6 @@ app.get('/most-active', async (req, res) => {
 
   try {
     const response = await pool.query('select * from most_active')
-    console.log(response.rows);
     res.json(response.rows);
 
   } catch (err) {
@@ -59,7 +56,6 @@ app.get('/insider-trading', async (req, res) => {
 
   try {
     const response = await pool.query('select * from insider_trading')
-    console.log(response.rows);
     res.json(response.rows);
 
   } catch (err) {
@@ -74,7 +70,76 @@ app.get('/short-interest', async (req, res) => {
 
   try {
     const response = await pool.query('select * from short_interest')
-    console.log(response.rows);
+    res.json(response.rows);
+
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json('data Server Error');
+  }
+})
+
+app.get('/contracts', async (req, res) => {
+
+  // this endpoint queries the database for all the contents of the contracts table
+
+  try {
+    const response = await pool.query('select * from contracts')
+    res.json(response.rows);
+
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json('data Server Error');
+  }
+})
+
+app.get('/lobbying', async (req, res) => {
+
+  // this endpoint queries the database for all the contents of the lobbying table
+
+  try {
+    const response = await pool.query('select * from lobbying')
+    res.json(response.rows);
+
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json('data Server Error');
+  }
+})
+
+app.get('/congress', async (req, res) => {
+
+  // this endpoint queries the database for all the contents of the congress table
+
+  try {
+    const response = await pool.query('select * from congress')
+    res.json(response.rows);
+
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json('data Server Error');
+  }
+})
+
+app.get('/senate', async (req, res) => {
+
+  // this endpoint queries the database for all the contents of the senate table
+
+  try {
+    const response = await pool.query('select * from senate')
+    res.json(response.rows);
+
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json('data Server Error');
+  }
+})
+
+app.get('/house', async (req, res) => {
+
+  // this endpoint queries the database for all the contents of the house table
+
+  try {
+    const response = await pool.query('select * from house')
     res.json(response.rows);
 
   } catch (err) {
