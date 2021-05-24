@@ -59,7 +59,8 @@ app.get('/insider-trading', async (req, res) => {
   // this endpoint queries the database for all the contents of the insider_trading table
 
   try {
-    const response = await pool.query('select * from insider_trading')
+    const response = await pool.query('select * from insider_trading\
+                                       order by it_id desc')
     res.json(response.rows);
 
   } catch (err) {
