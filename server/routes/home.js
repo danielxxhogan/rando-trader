@@ -3,6 +3,8 @@ const request = require('request');
 
 const BASE_URL = 'http://54.157.199.149:3002';
 
+
+// *****************************************************************************
 router.get('/premarket-gainers', async (req, res) => {
   try {
     request('http://54.157.199.149:3002/premarket-gainers', (err, reqres) => {
@@ -18,6 +20,7 @@ router.get('/premarket-gainers', async (req, res) => {
   }
 })
 
+// *****************************************************************************
 router.get('/premarket-losers', async (req, res) => {
   try {
     request('http://54.157.199.149:3002/premarket-losers', (err, reqres) => {
@@ -33,6 +36,7 @@ router.get('/premarket-losers', async (req, res) => {
   }
 })
 
+// *****************************************************************************
 router.get('/most-active', async (req, res) => {
   try {
     request('http://54.157.199.149:3002/most-active', (err, reqres) => {
@@ -48,6 +52,7 @@ router.get('/most-active', async (req, res) => {
   }
 })
 
+// *****************************************************************************
 router.get('/insider-trading', async (req, res) => {
   try {
     request('http://54.157.199.149:3002/insider-trading', (err, reqres) => {
@@ -63,6 +68,7 @@ router.get('/insider-trading', async (req, res) => {
   }
 })
 
+// *****************************************************************************
 router.get('/short-interest', async (req, res) => {
   try {
     request('http://54.157.199.149:3002/short-interest', (err, reqres) => {
@@ -78,6 +84,7 @@ router.get('/short-interest', async (req, res) => {
   }
 })
 
+// *****************************************************************************
 router.get('/contracts', async (req, res) => {
   try {
     request(BASE_URL + '/contracts', (err, reqres) => {
@@ -93,6 +100,7 @@ router.get('/contracts', async (req, res) => {
   }
 })
 
+// *****************************************************************************
 router.get('/lobbying', async (req, res) => {
   try {
     request(BASE_URL + '/lobbying', (err, reqres) => {
@@ -108,6 +116,7 @@ router.get('/lobbying', async (req, res) => {
   }
 })
 
+// *****************************************************************************
 router.get('/congress', async (req, res) => {
   try {
     request(BASE_URL + '/congress', (err, reqres) => {
@@ -123,6 +132,7 @@ router.get('/congress', async (req, res) => {
   }
 })
 
+// *****************************************************************************
 router.get('/senate', async (req, res) => {
   try {
     request(BASE_URL + '/senate', (err, reqres) => {
@@ -138,6 +148,7 @@ router.get('/senate', async (req, res) => {
   }
 })
 
+// *****************************************************************************
 router.get('/house', async (req, res) => {
   try {
     request(BASE_URL + '/house', (err, reqres) => {

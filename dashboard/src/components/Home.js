@@ -1,6 +1,31 @@
 import React, { useEffect, useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+
+const useStyles = makeStyles({
+  table: {
+    backgroundColor: '#275606',
+    color: 'white',
+  },
+  tr: {
+    color: 'white'
+  },
+  td: {
+    color: 'white',
+  }
+});
+
 
 const Home = () => {
+  const classes = useStyles();
+  // state variables for holding database data
+  // *****************************************************************************
   const [premarketGainers, setPremarketGainers] = useState();
   const [premarketLosers, setPremarketLosers] = useState();
   const [mostActive, setMostActive] = useState();
@@ -12,6 +37,9 @@ const Home = () => {
   const [senate, setSenate] = useState();
   const [house, setHouse] = useState();
 
+
+  // get data from all tables in the database
+  // *****************************************************************************
   const getPremarketGainers = async () => {
     const response = await fetch('/home/premarket-gainers');
     const parseRes = await response.json();
@@ -83,16 +111,18 @@ const Home = () => {
   useEffect(() => { getHouse(); },[])
 
 
-
-
+  // functions for creating table rows for each table
+  // *****************************************************************************
   const makePremarket = (row) => {
     return <>
       <tr>
-        <td>{row.ticker}</td>
-        <td>{row.company}</td>
-        <td>{row.price}</td>
-        <td>{row.change}</td>
-        <td>{row.volume}</td>
+        <TableRow className={classes.tr}>
+          <TableCell className={classes.td} align="right">{row.ticker}</TableCell>
+          <TableCell className={classes.td} align="right">{row.company}</TableCell>
+          <TableCell className={classes.td} align="right">{row.price}</TableCell>
+          <TableCell className={classes.td} align="right">{row.change}</TableCell>
+          <TableCell className={classes.td} align="right">{row.volume}</TableCell>
+        </TableRow>
       </tr>
     </>
   }
@@ -100,16 +130,19 @@ const Home = () => {
   const makeInsider = (row) => {
     return <>
       <tr>
-        <td>{row.filing_date}</td>
-        <td>{row.trade_date}</td>
-        <td>{row.company}</td>
-        <td>{row.insider}</td>
-        <td>{row.title}</td>
-        <td>{row.price}</td>
-        <td>{row.qty}</td>
-        <td>{row.owned}</td>
-        <td>{row.change}</td>
-        <td>{row.value}</td>
+        <TableRow className={classes.tr}>
+          <TableCell className={classes.td} align="right">{row.filing_date}</TableCell>
+          <TableCell className={classes.td} align="right">{row.trade_date}</TableCell>
+          <TableCell className={classes.td} align="right">{row.ticker}</TableCell>
+          <TableCell className={classes.td} align="right">{row.company}</TableCell>
+          <TableCell className={classes.td} align="right">{row.insider}</TableCell>
+          <TableCell className={classes.td} align="right">{row.title}</TableCell>
+          <TableCell className={classes.td} align="right">{row.price}</TableCell>
+          <TableCell className={classes.td} align="right">{row.qty}</TableCell>
+          <TableCell className={classes.td} align="right">{row.owned}</TableCell>
+          <TableCell className={classes.td} align="right">{row.change}</TableCell>
+          <TableCell className={classes.td} align="right">{row.value}</TableCell>
+        </TableRow>
       </tr>
     </>
   }
@@ -117,12 +150,14 @@ const Home = () => {
   const makeShortInterest = (row) => {
     return <>
       <tr>
-        <td>{row.ticker}</td>
-        <td>{row.company}</td>
-        <td>{row.price}</td>
-        <td>{row.short_interest}</td>
-        <td>{row.float}</td>
-        <td>{row.float_shorted}</td>
+        <TableRow className={classes.tr}>
+          <TableCell className={classes.td} align="right">{row.ticker}</TableCell>
+          <TableCell className={classes.td} align="right">{row.company}</TableCell>
+          <TableCell className={classes.td} align="right">{row.price}</TableCell>
+          <TableCell className={classes.td} align="right">{row.short_interest}</TableCell>
+          <TableCell className={classes.td} align="right">{row.float}</TableCell>
+          <TableCell className={classes.td} align="right">{row.float_shorted}</TableCell>
+        </TableRow>
       </tr>
     </>
   }
@@ -130,11 +165,13 @@ const Home = () => {
   const makeContracts = (row) => {
     return <>
       <tr>
-        <td>{row.ticker}</td>
-        <td>{row.date}</td>
-        <td>{row.agency}</td>
-        <td>{row.amount}</td>
-        <td>{row.description}</td>
+        <TableRow className={classes.tr}>
+          <TableCell className={classes.td} align="right">{row.ticker}</TableCell>
+          <TableCell className={classes.td} align="right">{row.date}</TableCell>
+          <TableCell className={classes.td} align="right">{row.agency}</TableCell>
+          <TableCell className={classes.td} align="right">{row.amount}</TableCell>
+          <TableCell className={classes.td} align="right">{row.description}</TableCell>
+      </TableRow>
       </tr>
     </>
   }
@@ -142,11 +179,13 @@ const Home = () => {
   const makeLobbying = (row) => {
     return <>
       <tr>
-        <td>{row.ticker}</td>
-        <td>{row.date}</td>
-        <td>{row.amount}</td>
-        <td>{row.client}</td>
-        <td>{row.issue}</td>
+        <TableRow className={classes.tr}>
+          <TableCell className={classes.td} align="right">{row.ticker}</TableCell>
+          <TableCell className={classes.td} align="right">{row.date}</TableCell>
+          <TableCell className={classes.td} align="right">{row.amount}</TableCell>
+          <TableCell className={classes.td} align="right">{row.client}</TableCell>
+          <TableCell className={classes.td} align="right">{row.issue}</TableCell>
+        </TableRow>
       </tr>
     </>
   }
@@ -154,13 +193,15 @@ const Home = () => {
   const makeCongress = (row) => {
     return <>
       <tr>
-        <td>{row.ticker}</td>
-        <td>{row.report_date}</td>
-        <td>{row.transaction_date}</td>
-        <td>{row.amount}</td>
-        <td>{row.transaction}</td>
-        <td>{row.representative}</td>
-        <td>{row.house}</td>
+        <TableRow className={classes.tr}>
+          <TableCell className={classes.td} align="right">{row.ticker}</TableCell>
+          <TableCell className={classes.td} align="right">{row.report_date}</TableCell>
+          <TableCell className={classes.td} align="right">{row.transaction_date}</TableCell>
+          <TableCell className={classes.td} align="right">{row.amount}</TableCell>
+          <TableCell className={classes.td} align="right">{row.transaction}</TableCell>
+          <TableCell className={classes.td} align="right">{row.representative}</TableCell>
+          <TableCell className={classes.td} align="right">{row.house}</TableCell>
+        </TableRow>
       </tr>
     </>
   }
@@ -168,11 +209,13 @@ const Home = () => {
   const makeSenate = (row) => {
     return <>
       <tr>
-        <td>{row.ticker}</td>
-        <td>{row.date}</td>
-        <td>{row.amount}</td>
-        <td>{row.transaction}</td>
-        <td>{row.senator}</td>
+        <TableRow className={classes.tr}>
+          <TableCell className={classes.td} align="right">{row.ticker}</TableCell>
+          <TableCell className={classes.td} align="right">{row.date}</TableCell>
+          <TableCell className={classes.td} align="right">{row.amount}</TableCell>
+          <TableCell className={classes.td} align="right">{row.transaction}</TableCell>
+          <TableCell className={classes.td} align="right">{row.senator}</TableCell>
+        </TableRow>
       </tr>
     </>
   }
@@ -180,11 +223,13 @@ const Home = () => {
   const makeHouse = (row) => {
     return <>
       <tr>
-        <td>{row.ticker}</td>
-        <td>{row.date}</td>
-        <td>{row.amount}</td>
-        <td>{row.transaction}</td>
-        <td>{row.representative}</td>
+        <TableRow className={classes.tr}>
+          <TableCell className={classes.td} align="right">{row.ticker}</TableCell>
+          <TableCell className={classes.td} align="right">{row.date}</TableCell>
+          <TableCell className={classes.td} align="right">{row.amount}</TableCell>
+          <TableCell className={classes.td} align="right">{row.transaction}</TableCell>
+          <TableCell className={classes.td} align="right">{row.representative}</TableCell>
+        </TableRow>
       </tr>
     </>
   }
@@ -196,66 +241,135 @@ const Home = () => {
     <h1>Home</h1>
 
     <h2>Premarket Gainers</h2>
-    <table>
-      {premarketGainers && premarketGainers.map(row => { return makePremarket(row) })}
-    </table>
+    <div class='table'>
+    <TableContainer component={Paper}>
+      <Table className={classes.table} aria-label="simple table">
+        <TableBody>
+          {premarketGainers && premarketGainers.map(row => { return makePremarket(row) })}
+        </TableBody>
+      </Table>
+    </TableContainer>
+    </div>
+
 
     <hr />
     <h2>Premarket Losers</h2>
-    <table>
-    {premarketLosers && premarketLosers.map(row => { return makePremarket(row) })}
-    </table>
+    <div class='table'>
+      <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="simple table">
+          <TableBody>
+            {premarketLosers && premarketLosers.map(row => { return makePremarket(row) })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
+
 
     <hr />
     <h2>Most Active</h2>
-    <table>
-    {mostActive && mostActive.map(row => { return makePremarket(row) })}
-    </table>
+    <div class='table'>
+      <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="simple table">
+          <TableBody>
+            {mostActive && mostActive.map(row => { return makePremarket(row) })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
+
 
     <hr />
     <h2>Insider Trading</h2>
-    <table>
-    {insiderTrading && insiderTrading.map(row => { return makeInsider(row) })}
-    </table>
+    <div class='table'>
+      <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="simple table">
+          <TableBody>
+            {insiderTrading && insiderTrading.map(row => { return makeInsider(row) })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
+
 
     <hr />
     <h2>Short Interest</h2>
-    <table>
-    {shortInterest && shortInterest.map(row => { return makeShortInterest(row) })}
-    </table>
+    <div class='table'>
+      <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="simple table">
+          <TableBody>
+            {shortInterest && shortInterest.map(row => { return makeShortInterest(row) })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
+
 
     <hr />
     <h2>Government Contracts</h2>
-    <table>
-    {contracts && contracts.map(row => { return makeContracts(row) })}
-    </table>
+    <div class='table'>
+      <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="simple table">
+          <TableBody>
+            {contracts && contracts.map(row => { return makeContracts(row) })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
+
 
     <hr />
     <h2>Corporate Lobbying</h2>
-    <table>
-    {lobbying && lobbying.map(row => { return makeLobbying(row) })}
-    </table>
+    <div class='table'>
+      <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="simple table">
+          <TableBody>
+            {lobbying && lobbying.map(row => { return makeLobbying(row) })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
+
 
     <hr />
     <h2>Congress Trades</h2>
-    <table>
-    {congress && congress.map(row => { return makeCongress(row) })}
-    </table>
+    <div class='table'>
+      <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="simple table">
+          <TableBody>
+            {congress && congress.map(row => { return makeCongress(row) })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
+
 
     <hr />
     <h2>Senate Trades</h2>
-    <table>
-    {senate && senate.map(row => { return makeSenate(row) })}
-    </table>
+    <div class='table'>
+      <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="simple table">
+          <TableBody>
+            {senate && senate.map(row => { return makeSenate(row) })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
+
 
     <hr />
     <h2>House Trades</h2>
-    <table>
-    {house && house.map(row => { return makeHouse(row) })}
-    </table>
+    <div class='table'>
+      <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="simple table">
+          <TableBody>
+            {house && house.map(row => { return makeHouse(row) })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
+
 
   </>
-
 }
 
 export default Home;

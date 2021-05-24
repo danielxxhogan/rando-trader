@@ -1,3 +1,29 @@
+:root {
+  --dark-blue: #0E1327;
+  --medium-blue: #3351B7;
+  --hover-blue: #3339B7;
+  --silver: #BBBBBF;
+
+}
+
+body {
+  background-color: var(--dark-blue);
+  color: var(--silver);
+  padding: 2%;
+}
+
 #title {
   font-size: 5rem;
+}
+
+.table {
+  height: 500px;
+  overflow-y: scroll;
+  width: 80%;
+  margin: auto;
+  margin-bottom: 8%;
+}
+
+.row {
+  border-bottom: 1pt solid black;
 }

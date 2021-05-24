@@ -7,6 +7,7 @@ app.use(cors());
 
 PORT = process.env.PORT || 3002;
 
+
 // *****************************************************************************
 app.get('/premarket-gainers', async (req, res) => {
 
@@ -22,6 +23,7 @@ app.get('/premarket-gainers', async (req, res) => {
   }
 })
 
+// *****************************************************************************
 app.get('/premarket-losers', async (req, res) => {
 
   // this endpoint queries the database for all the contents of the premarket_losers table
@@ -36,6 +38,7 @@ app.get('/premarket-losers', async (req, res) => {
   }
 })
 
+// *****************************************************************************
 app.get('/most-active', async (req, res) => {
 
   // this endpoint queries the database for all the contents of the most_active table
@@ -50,6 +53,7 @@ app.get('/most-active', async (req, res) => {
   }
 })
 
+// *****************************************************************************
 app.get('/insider-trading', async (req, res) => {
 
   // this endpoint queries the database for all the contents of the insider_trading table
@@ -64,6 +68,7 @@ app.get('/insider-trading', async (req, res) => {
   }
 })
 
+// *****************************************************************************
 app.get('/short-interest', async (req, res) => {
 
   // this endpoint queries the database for all the contents of the short_interest table
@@ -78,6 +83,7 @@ app.get('/short-interest', async (req, res) => {
   }
 })
 
+// *****************************************************************************
 app.get('/contracts', async (req, res) => {
 
   // this endpoint queries the database for all the contents of the contracts table
@@ -92,6 +98,7 @@ app.get('/contracts', async (req, res) => {
   }
 })
 
+// *****************************************************************************
 app.get('/lobbying', async (req, res) => {
 
   // this endpoint queries the database for all the contents of the lobbying table
@@ -106,6 +113,7 @@ app.get('/lobbying', async (req, res) => {
   }
 })
 
+// *****************************************************************************
 app.get('/congress', async (req, res) => {
 
   // this endpoint queries the database for all the contents of the congress table
@@ -120,6 +128,7 @@ app.get('/congress', async (req, res) => {
   }
 })
 
+// *****************************************************************************
 app.get('/senate', async (req, res) => {
 
   // this endpoint queries the database for all the contents of the senate table
@@ -134,6 +143,7 @@ app.get('/senate', async (req, res) => {
   }
 })
 
+// *****************************************************************************
 app.get('/house', async (req, res) => {
 
   // this endpoint queries the database for all the contents of the house table
@@ -148,8 +158,7 @@ app.get('/house', async (req, res) => {
   }
 })
 
-
-
+// *****************************************************************************
 app.get('*', (req, res) => {
   res.status(404).send('Thats not a recognized endpoint');
 })
