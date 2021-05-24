@@ -18,6 +18,7 @@ const useStyles = makeStyles({
   },
   td: {
     color: 'white',
+    padding: '1rem',
   }
 });
 
@@ -244,6 +245,17 @@ const Home = () => {
     <div class='table'>
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="simple table">
+        <TableHead>
+          <tr>
+            <TableRow>
+              <TableCell className={classes.td}>Ticker</TableCell>
+              <TableCell className={classes.td}>Company</TableCell>
+              <TableCell className={classes.td}>Price</TableCell>
+              <TableCell className={classes.td}>Change</TableCell>
+              <TableCell className={classes.td}>Volume</TableCell>
+            </TableRow>
+          </tr>
+        </TableHead>
         <TableBody>
           {premarketGainers && premarketGainers.map(row => { return makePremarket(row) })}
         </TableBody>
