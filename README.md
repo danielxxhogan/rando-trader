@@ -8,7 +8,7 @@ store it to a postgres db hosted on RDS. The scripts are executed on an ec2 inst
 The second part is a series of trading algorithms that retrieve universes of stocks and other relevant data from the db and place trades
 accordingly by connecting to the broker api. The broker I use is Alpaca.
 
-The third part is the Rando-Trader dashboard which is a React/Express application hosted on Digital Ocean and accessible at rando-trader.com.
+The third part is the Rando-Trader dashboard which is a React/Express application hosted on Digital Ocean and accessible at randotrader.com.
 When the site is visited, data from the db is retrieved and displayed in the browser, and it also supports search functionality.  
 
 
