@@ -35,7 +35,6 @@ def test():
     return 'test'
 
 
-
 # GET ANALYST RATINGS FROM BENZINGA
 # *****************************************************************************
 @app.route('/analyst-ratings/<ticker>', methods=['GET'])
@@ -73,15 +72,9 @@ def get_analyst_ratings(ticker):
     
     return response
 
-
-
-
-
-
   except Exception as e:
     print(e)
     return 'Server Error', 500
-
 
 
 # GET INSIDER TRADING
@@ -114,10 +107,6 @@ def get_insider_trading(ticker):
 
   except Exception as e:
     return 'Server Error', 500
-
-
-
-
 
 
 # GET QUIVER DATA FOR TICKER
@@ -256,10 +245,6 @@ def get_quiver_data(ticker):
     return 'Server Error', 500
 
 
-
-
-
-
 # GET PRESS RELEASES FROM BENZINGA
 # *****************************************************************************
 @app.route('/press-releases/<ticker>', methods=['GET'])
@@ -306,7 +291,6 @@ def get_press_releases(ticker):
     
     response['press_releases'] = press_releases_today
     return response
-
 
 
 # GET STOCKTWITS DATA FOR TICKER, CALCULATE CURRENT MESSAGES, CURRENT SENTIMENT, AND OVERALL SENTIMENT
