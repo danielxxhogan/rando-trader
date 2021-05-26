@@ -25,6 +25,7 @@ const useStyles = makeStyles({
 
 const Home = () => {
   const classes = useStyles();
+  
   // state variables for holding database data
   // *****************************************************************************
   const [premarketGainers, setPremarketGainers] = useState();
