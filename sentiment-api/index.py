@@ -237,8 +237,6 @@ def get_quiver_data(ticker):
     response['house_sales'] = house_sales
 
     return response
-
-
     
   except Exception as e:
     print(e)
