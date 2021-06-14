@@ -43,7 +43,6 @@ for i in range(len(earnings)):
         earnings[i+7] != '-'):
         
         ticker = earnings[i+2]
-        print(ticker)
         date = dt.datetime.today().strftime('%Y-%m-%d')
         
         cursor.execute('insert into morning_earnings (date, ticker, estimate, actual, surprise) \

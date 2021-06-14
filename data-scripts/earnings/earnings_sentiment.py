@@ -1,4 +1,14 @@
+# file: earnings_sentiment.py
+# author: Daniel Hogan
 
+# This python script establishes a connection to the database and deletes all
+# the contents of the earnings_sentiment table. It then uses Selenium to open
+# a browser and navigates to https://www.benzinga.com/news/earnings. It gets all
+# data that has a value of 'PM' in the Time column and passes each ticker into the
+# sentiment function imported from the local sentiment.py file. The sentiment
+# function takes in a ticker and returns a dictionary of data about the ticker.
+#  All this data is inserted and commited to the database.
+# *****************************************************************************
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
