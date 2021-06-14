@@ -1,3 +1,12 @@
+# file: sentiment.py
+# author: Daniel Hogan
+
+# This python script defines a class called Sentiment. When a Sentiment object
+# is instantiated, the constructor function takes in a ticker. There are 6 methods
+# that can be invoked on a Sentiment object, get_new, get_stocktwits, get_press_releases,
+# get_insider_trading, get_analyst_ratings, and get_quiver_data.
+# *****************************************************************************
+
 import requests
 from selenium import webdriver
 from selenium.webdriver.common.by import By
