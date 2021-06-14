@@ -109,7 +109,6 @@ class Sentiment:
         # structures used to store intermediate calculations.
         
         try:
-            print('inside get_sentiment')
             document = language_v1.Document(content=significant_data, type_=language_v1.Document.Type.PLAIN_TEXT)
             sentiment = client.analyze_sentiment(request={'document': document}).document_sentiment
             
