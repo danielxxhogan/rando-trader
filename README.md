@@ -111,8 +111,8 @@ crontab -e
 
 
 \# GET AM EARNINGS IN THE MORNING, GET PM EARNINGS IN THE AFTERNOON, GET EARNINGS SENTIMENT SHORTLY BEFORE MARKET CLOSE<br />
-25 6 * * 1-5 cd ~/rando-trader/data-scripts/earnings && python3 morning_earnings_b.py<br />
-0 17 * * 1-5 cd ~/rando-trader/data-scripts/earnings && python3 after_market_earnings_b.py<br />
+25 6 * * 1-5 cd ~/rando-trader/data-scripts/earnings && python3 morning_earnings.py<br />
+0 17 * * 1-5 cd ~/rando-trader/data-scripts/earnings && python3 after_market_earnings.py<br />
 55 12 * * 1-5 cd ~/rando-trader/data-scripts/earnings && export GOOGLE_APPLICATION_CREDENTIALS=credentials.json && python3 earnings_sentiment.py<br />
 
 
