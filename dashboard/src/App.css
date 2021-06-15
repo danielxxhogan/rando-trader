@@ -23,3 +23,28 @@ body {
   margin: auto;
   margin-bottom: 8%;
 }
+
+nav ul {
+  display: flex;
+  flex-direction: row;
+  gap: 10%;
+  list-style: none;
+}
+
+nav ul a {
+  font-size: 2.5rem;
+}
+
+nav ul a, nav ul a:visited {
+  color: var(--silver);
+  text-decoration: none;
+}
+
+nav ul a:hover {
+  cursor: pointer;
+  color:aquamarine;
+}
+
+button:hover {
+  cursor: pointer;
+}

@@ -214,7 +214,6 @@ def get_analyst_ratings(ticker):
 @app.route('/insider-trading/<ticker>', methods=['GET'])
 def get_insider_trading(ticker):
   try:
-    response = {}
     insider_trades = 0
     
     try:
@@ -233,9 +232,8 @@ def get_insider_trading(ticker):
                 
     except:
         pass
-    
-    response['insider_trades'] = insider_trades
-    return response
+
+    return insider_trades
 
   except Exception as e:
     return 'Server Error', 500
@@ -361,7 +359,7 @@ def get_quiver_data(ticker):
                 
         print(f'house buys: {house_buys}')
         print(f'house sells: {house_sales}\n')
-        
+
     except:
         pass
     

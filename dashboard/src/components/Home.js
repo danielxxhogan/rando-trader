@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import {Link} from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -240,7 +241,12 @@ const Home = () => {
   return <>
     <h1 id='title'>Rando-Trader</h1>
 
-    <h1>Home</h1>
+    <nav>
+      <ul>
+        <li><Link to='/'><h1>Home</h1></Link></li>
+        <li><Link to='/search'><h1>Search</h1></Link></li>
+      </ul>
+    </nav>
 
     <h2>Premarket Gainers</h2>
     <div class='table'>
@@ -380,8 +386,6 @@ const Home = () => {
         </Table>
       </TableContainer>
     </div>
-
-
   </>
 }
 
