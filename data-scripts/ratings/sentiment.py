@@ -31,8 +31,8 @@ class Sentiment:
 
         try:
             results = {'articles_today': 0,
-                        'total_sentiment': 0.0,
-                        'today_total_sentiment': 0.0}
+                       'total_sentiment': 0.0,
+                       'today_total_sentiment': 0.0}
 
             containers = {'total_magnitude': 0.0,
                           'magnitude_scores': [],
