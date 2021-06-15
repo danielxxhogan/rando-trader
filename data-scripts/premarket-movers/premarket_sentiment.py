@@ -10,7 +10,7 @@
 # *****************************************************************************
 
 import psycopg2
-import sentiment
+from sentiment import Sentiment
 
 from config import *
 
@@ -52,8 +52,17 @@ tickers = temp2
 
 for ticker in tickers:
     print(ticker)
-    ticker_sentiment = sentiment.calculate_sentiment(f'{ticker}')
-    print(ticker_sentiment)
+    
+    s = Sentiment(ticker)
+    news = s.get_news()
+    stocktwits = s.get_stocktwits()
+    press_releases = s.get_press_releases()
+    analyst_ratings = s.get_analyst_ratings()
+    insider_trading = s.get_insider_trading()
+    quiver_data = s.get_quiver_data()
+    
+    # ticker_sentiment = sentiment.calculate_sentiment(f'{ticker}')
+    # print(ticker_sentiment)
     
     cursor.execute('insert into premarket_sentiment (ticker, articles, sentiment, \
         today_sentiment, messages, today_sentiment_st, sentiment_st, \
@@ -62,17 +71,29 @@ for ticker in tickers:
         house_sells, insider_trades, upgrades, downgrades) \
         values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, \
                 %s, %s, %s, %s, %s, %s, %s)',
-        (ticker, ticker_sentiment['articles'], ticker_sentiment['sentiment'],
-        ticker_sentiment['today_sentiment'], ticker_sentiment['messages'],
-        ticker_sentiment['today_sentiment_st'], ticker_sentiment['sentiment_st'],
-        ticker_sentiment['press_releases'], ticker_sentiment['contracts'],
-        ticker_sentiment['lobbying'], ticker_sentiment['congress_buys'],
-        ticker_sentiment['congress_sales'], ticker_sentiment['senate_buys'],
-        ticker_sentiment['senate_sales'], ticker_sentiment['house_buys'],
-        ticker_sentiment['house_sales'], ticker_sentiment['insider_trades'],
-        ticker_sentiment['upgrades'], ticker_sentiment['downgrades']))
+        (ticker, news['articles_today'], news['total_sentiment'],
+        news['today_total_sentiment'], stocktwits['articles_today'],
+        stocktwits['today_total_sentiment'], stocktwits['total_sentiment'],
+        press_releases, quiver_data['contracts'], quiver_data['lobbying'],
+        quiver_data['congress_buys'], quiver_data['congress_sales'],
+        quiver_data['senate_buys'], quiver_data['senate_sales'],
+        quiver_data['house_buys'], quiver_data['house_sales'],
+        insider_trading, analyst_ratings['upgrades'], analyst_ratings['downgrades']))
+    
+    
+    
+        # (ticker, ticker_sentiment['articles'], ticker_sentiment['sentiment'],
+        # ticker_sentiment['today_sentiment'], ticker_sentiment['messages'],
+        # ticker_sentiment['today_sentiment_st'], ticker_sentiment['sentiment_st'],
+        # ticker_sentiment['press_releases'], ticker_sentiment['contracts'],
+        # ticker_sentiment['lobbying'], ticker_sentiment['congress_buys'],
+        # ticker_sentiment['congress_sales'], ticker_sentiment['senate_buys'],
+        # ticker_sentiment['senate_sales'], ticker_sentiment['house_buys'],
+        # ticker_sentiment['house_sales'], ticker_sentiment['insider_trades'],
+        # ticker_sentiment['upgrades'], ticker_sentiment['downgrades']))
     
     conn.commit()
+    # break
 
 
 cursor.close()
