@@ -136,21 +136,25 @@ class Sentiment:
         # magnitude by that articles sentiment score to get its relative sentiment score
         # and add the relative sentiment score to the total sentiment score for today.
         
-        for i in range(len(containers['today_sentiment_scores'])):
-            magnitude = containers['today_magnitude_scores'][i] / containers['today_total_magnitude']
-            sentiment = containers['today_sentiment_scores'][i] * magnitude
-            results['today_total_sentiment'] += sentiment
+        try:
+            for i in range(len(containers['today_sentiment_scores'])):
+                magnitude = containers['today_magnitude_scores'][i] / containers['today_total_magnitude']
+                sentiment = containers['today_sentiment_scores'][i] * magnitude
+                results['today_total_sentiment'] += sentiment
+                
+            # add all values for just today to total. Total values include every day including today.
+                
+            containers['total_magnitude'] += containers['today_total_magnitude']
+            containers['magnitude_scores'] += containers['today_magnitude_scores']
+            containers['sentiment_scores'] += containers['today_sentiment_scores']
             
-        # add all values for just today to total. Total values include every day including today.
-            
-        containers['total_magnitude'] += containers['today_total_magnitude']
-        containers['magnitude_scores'] += containers['today_magnitude_scores']
-        containers['sentiment_scores'] += containers['today_sentiment_scores']
-        
-        for i in range(len(containers['sentiment_scores'])):
-            magnitude = containers['magnitude_scores'][i] / containers['total_magnitude']
-            sentiment = containers['sentiment_scores'][i] * magnitude
-            results['total_sentiment'] += sentiment
+            for i in range(len(containers['sentiment_scores'])):
+                magnitude = containers['magnitude_scores'][i] / containers['total_magnitude']
+                sentiment = containers['sentiment_scores'][i] * magnitude
+                results['total_sentiment'] += sentiment
+                
+        except Exception as e:
+            print(e)
             
         return results
     
