@@ -266,12 +266,10 @@ class Sentiment:
             for filing in contracts:
                 if filing['Date'] > month_ago:        
                     num_contracts += 1
-            
         except:
             pass
         
         response['contracts'] = num_contracts
-        
         
         # ----- lobbying -----
         num_lobbying = 0
@@ -283,12 +281,10 @@ class Sentiment:
             for filing in lobbying:
                 if filing['Date'] > month_ago:        
                     num_lobbying += 1
-            
         except:
             pass
         
         response['lobbying'] = num_lobbying
-        
         
         # ----- congress -----
         congress_buys = 0
@@ -298,14 +294,12 @@ class Sentiment:
             r = requests.get(f'{QUIVER_URL}/historical/congresstrading/{ticker}', headers=headers)
             congress = r.json()
             
-            
             for filing in congress:
                 if filing['TransactionDate'] > month_ago and filing['Transaction'] == 'Purchase':
                     congress_buys += 1
                     
                 elif filing['TransactionDate'] > month_ago and filing['Transaction'] == 'Sale':
                     congress_sales += 1
-            
         except:
             pass
         
@@ -320,14 +314,12 @@ class Sentiment:
             r = requests.get(f'{QUIVER_URL}/historical/senatetrading/{ticker}', headers=headers)
             senate = r.json()
             
-            
             for filing in senate:
                 if filing['Date'] > month_ago and filing['Transaction'] == 'Purchase':
                     senate_buys += 1
                     
                 elif filing['Date'] > month_ago and filing['Transaction'] == 'Sale':
                     senate_sales += 1
-            
         except:
             pass
         
@@ -349,7 +341,6 @@ class Sentiment:
                     
                 elif filing['Date'] > month_ago and filing['Transaction'] == 'Sale':
                     house_sales += 1
-            
         except:
             pass
         
@@ -357,7 +348,7 @@ class Sentiment:
         response['house_sales'] = house_sales
         
         return response
-    
+
     
 if __name__ == '__main__':
     

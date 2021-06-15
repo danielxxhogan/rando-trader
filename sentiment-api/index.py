@@ -41,8 +41,8 @@ def test():
 def get_news(ticker):
     SIGNIFICANT_DATA = 'description'
     results = {'articles_today': 0,
-            'total_sentiment': 0.0,
-            'today_total_sentiment': 0.0}
+               'total_sentiment': 0.0,
+               'today_total_sentiment': 0.0}
     
     try:
         containers = {'total_magnitude': 0.0,
@@ -79,16 +79,16 @@ def get_news(ticker):
 @app.route('/stocktwits/<ticker>', methods=['GET'])
 def get_stocktwits_data(ticker):
     results = {'articles_today': 0,
-       'total_sentiment': 0.0,
-       'today_total_sentiment': 0.0}
+               'total_sentiment': 0.0,
+               'today_total_sentiment': 0.0}
     
     try:
         containers = {'total_magnitude': 0.0,
-              'magnitude_scores': [],
-              'sentiment_scores': [],
-              'today_total_magnitude': 0.0,
-              'today_magnitude_scores': [],
-              'today_sentiment_scores': []}
+                      'magnitude_scores': [],
+                      'sentiment_scores': [],
+                      'today_total_magnitude': 0.0,
+                      'today_magnitude_scores': [],
+                      'today_sentiment_scores': []}
             
         r = requests.get(f'https://api.stocktwits.com/api/2/streams/symbol/{ticker}.json')
         messages = r.json()['messages']
@@ -192,9 +192,6 @@ def get_analyst_ratings(ticker):
                 upgrades += 1
             elif 'Downgrades' in rating:
                 downgrades += 1
-                
-        print(f'upgrades: {upgrades}')
-        print(f'downgrades: {downgrades}')
         
     except:
         pass
@@ -214,6 +211,7 @@ def get_analyst_ratings(ticker):
 @app.route('/insider-trading/<ticker>', methods=['GET'])
 def get_insider_trading(ticker):
   try:
+    response = {}
     insider_trades = 0
     
     try:
@@ -228,12 +226,11 @@ def get_insider_trading(ticker):
             if 'Buy' in filing:
                 insider_trades += 1
                 
-        print(f'insider trades: {insider_trades}')
-                
     except:
         pass
-
-    return insider_trades
+    
+    response['insider_traders'] = insider_trades
+    return response
 
   except Exception as e:
     return 'Server Error', 500
@@ -263,8 +260,6 @@ def get_quiver_data(ticker):
         for filing in contracts:
             if filing['Date'] > month_ago:        
                 num_contracts += 1
-                
-        print(f'contracts: {num_contracts}')
         
     except:
         pass
@@ -282,8 +277,6 @@ def get_quiver_data(ticker):
         for filing in lobbying:
             if filing['Date'] > month_ago:        
                 num_lobbying += 1
-                
-        print(f'lobbying: {num_lobbying}\n')
         
     except:
         pass
@@ -306,9 +299,6 @@ def get_quiver_data(ticker):
                 
             elif filing['TransactionDate'] > month_ago and filing['Transaction'] == 'Sale':
                 congress_sales += 1
-                
-        print(f'congress buys: {congress_buys}')
-        print(f'congress sells: {congress_sales}')
         
     except:
         pass
@@ -331,9 +321,6 @@ def get_quiver_data(ticker):
                 
             elif filing['Date'] > month_ago and filing['Transaction'] == 'Sale':
                 senate_sales += 1
-                
-        print(f'senate buys: {senate_buys}')
-        print(f'senate sells: {senate_sales}')
         
     except:
         pass
@@ -356,9 +343,6 @@ def get_quiver_data(ticker):
                 
             elif filing['Date'] > month_ago and filing['Transaction'] == 'Sale':
                 house_sales += 1
-                
-        print(f'house buys: {house_buys}')
-        print(f'house sells: {house_sales}\n')
 
     except:
         pass
@@ -411,8 +395,6 @@ def get_press_releases(ticker):
         if date == today:
             for j in range(1, len(press_releases), 2):
                 press_releases_today += 1
-            
-        print(f'press releases today: {press_releases_today}\n')
         
     except:
         pass
