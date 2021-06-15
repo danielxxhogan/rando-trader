@@ -36,6 +36,8 @@ browser.get('https://www.benzinga.com/news/earnings')
 earnings = WebDriverWait(browser, 20).until(EC.presence_of_element_located((By.XPATH, '//*[@id="earnings-calendar"]/div/div[2]/div[1]/div/div[2]/div[2]/div[3]/div[2]/div/div'))).text.split('\n')
 browser.quit()
 
+date = dt.datetime.today().strftime('%Y-%m-%d')
+
 for i in range(len(earnings)):
     if (re.search('[0-9]{2}/[0-9]{2}/[0-9]{4}', earnings[i]) and
         earnings[i+1] == 'AM' and
@@ -43,14 +45,13 @@ for i in range(len(earnings)):
         earnings[i+7] != '-'):
         
         ticker = earnings[i+2]
-        date = dt.datetime.today().strftime('%Y-%m-%d')
         
         cursor.execute('insert into morning_earnings (date, ticker, estimate, actual, surprise) \
                 values (%s, %s, %s, %s, %s)',
                 (date, earnings[i+2],
-                 float(earnings[i+5][1:]),
-                 float(earnings[i+6][1:]),
-                 float(earnings[i+7][:-1])*100))
+                 float(earnings[i+5].replace('$', '')),
+                 float(earnings[i+6].replace('$', '')),
+                 float(earnings[i+7].replace('%', ''))*100))
 
 
 conn.commit()

@@ -49,9 +49,9 @@ for i in range(len(earnings)):
         cursor.execute('insert into morning_earnings (date, ticker, estimate, actual, surprise) \
                 values (%s, %s, %s, %s, %s)',
                 (date, earnings[i+2],
-                 float(earnings[i+5][1:]),
-                 float(earnings[i+6][1:]),
-                 float(earnings[i+7][:-1])*100))
+                 float(earnings[i+5].replace('$', '')),
+                 float(earnings[i+6].replace('$', '')),
+                 float(earnings[i+7].replace('%', ''))*100))
             
             
 conn.commit()
