@@ -3,7 +3,7 @@
 
 # This python script defines a class called Sentiment. When a Sentiment object
 # is instantiated, the constructor function takes in a ticker. There are 6 methods
-# that can be invoked on a Sentiment object, get_new, get_stocktwits, get_press_releases,
+# that can be invoked on a Sentiment object, get_news, get_stocktwits, get_press_releases,
 # get_insider_trading, get_analyst_ratings, and get_quiver_data.
 # *****************************************************************************
 
