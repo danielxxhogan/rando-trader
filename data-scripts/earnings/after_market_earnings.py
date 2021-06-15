@@ -15,6 +15,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import psycopg2
 import datetime as dt
 import re
+import time
 
 from config import *
 
@@ -32,10 +33,10 @@ options = webdriver.ChromeOptions()
 options.add_argument('--headless')
 browser = webdriver.Chrome(options=options)
 browser.get('https://www.benzinga.com/news/earnings')
-earnings = WebDriverWait(browser, 100).until(EC.presence_of_element_located((By.XPATH, '//*[@id="earnings-calendar"]/div/div[2]/div[1]/div/div[2]/div[2]/div[3]/div[2]/div/div'))).text.split('\n')
+earnings = WebDriverWait(browser, 20).until(EC.presence_of_element_located((By.XPATH, '//*[@id="earnings-calendar"]/div/div[2]/div[1]/div/div[2]/div[2]/div[3]/div[2]/div/div'))).text.split('\n')
 browser.quit()
 
-
+date = dt.datetime.today().strftime('%Y-%m-%d')
 
 for i in range(len(earnings)):
     if (re.search('[0-9]{2}/[0-9]{2}/[0-9]{4}', earnings[i]) and
@@ -44,8 +45,7 @@ for i in range(len(earnings)):
         earnings[i+7] != '-'):
         
         ticker = earnings[i+2]
-        date = dt.datetime.today().strftime('%Y-%m-%d')
-        
+
         cursor.execute('insert into morning_earnings (date, ticker, estimate, actual, surprise) \
                 values (%s, %s, %s, %s, %s)',
                 (date, earnings[i+2],
