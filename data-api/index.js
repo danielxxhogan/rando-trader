@@ -70,6 +70,24 @@ app.get('/insider-trading', async (req, res) => {
 })
 
 // *****************************************************************************
+app.get('/insider-trading-ticker/:ticker', async (req, res) => {
+
+  // this endpoint is for the search page to search the insider_trading table for
+  // a specific ticker
+  console.log()
+  try {
+    const response = await pool.query('select * from insider_trading\
+                                       where ticker = $1',
+                                       [req.params.ticker])
+    res.json(response.rows);
+
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json('data Server Error');
+  }
+})
+
+// *****************************************************************************
 app.get('/short-interest', async (req, res) => {
 
   // this endpoint queries the database for all the contents of the short_interest table

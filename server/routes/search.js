@@ -2,6 +2,7 @@ const router = require('express').Router();
 const fetch = require('node-fetch');
 
 const SENTIMENT_API_URL = 'http://localhost:5000';
+const DATA_API_URL = 'http://54.157.199.149:3002'
 
 router.get('/news/:ticker', async (req, res) => {
   try {
@@ -49,6 +50,15 @@ router.get('/press-releases/:ticker', async (req, res) => {
 })
 
 router.get('/insider-trading/:ticker', async (req, res) => {
+  try {
+    const ticker = req.params.ticker.toUpperCase();
+    const response = await fetch()
+    
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json('Server Error');
+  }
+
   try {
     const ticker = req.params.ticker.toUpperCase();
     const response = await fetch(SENTIMENT_API_URL + `/insider-trading/${ticker}`);
