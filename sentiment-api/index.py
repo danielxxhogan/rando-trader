@@ -1,3 +1,6 @@
+# https://www.youtube.com/watch?v=YFBRVJPhDGY
+# video for setting up apache server
+
 from flask import Flask
 import psycopg2
 
