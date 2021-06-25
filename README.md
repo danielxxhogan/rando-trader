@@ -37,6 +37,8 @@ copy over all config, credentials, and env files
 
 ----- Get distutils and pip and install all requirements -----  
 
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+
 sudo apt-get install python3-distutils
 
 python3 get-pip.py
