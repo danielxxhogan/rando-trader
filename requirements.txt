@@ -6,3 +6,4 @@ selenium
 google-cloud-language
 alpaca-trade-api
 bs4
+flask
