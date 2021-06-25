@@ -207,65 +207,6 @@ def get_analyst_ratings(ticker):
     return 'Server Error', 500
 
 
-# GET INSIDER TRADING
-# *****************************************************************************
-@app.route('/insider-trading/<ticker>', methods=['GET'])
-def get_insider_trading(ticker):
-  try:
-    print(ticker)
-    conn = psycopg2.connect(user=PG_USER,
-                 password=PG_PASSWORD,
-                 host=PG_HOST,
-                 port=PG_PORT,
-                 dbname=PG_DATABASE,
-                 )
-
-    cursor = conn.cursor()
-    cursor.execute('select *\
-                    from insider_trading\
-                    where ticker = %s',
-                    (ticker,))
-
-    insider_trading = cursor.fetchall()
-    cursor.close()
-    conn.close()
-
-    return json.dumps(insider_trading)
-
-  except Exception as e:
-    print(e)
-    return 'Server Error', 500
-
-
-
-
-
-  # try:
-  #   response = {}
-  #   insider_trades = 0
-    
-  #   try:
-  #       options = webdriver.ChromeOptions()
-  #       options.add_argument('--headless')
-  #       browser = webdriver.Chrome(options=options)
-  #       browser.get(f'https://finviz.com/quote.ashx?t={ticker}')
-  #       insider_trading = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[4]/div/table[3]/tbody/tr[12]/td/table/tbody'))).text.split('\n')
-  #       browser.quit()
-
-  #       for filing in insider_trading:
-  #           if 'Buy' in filing:
-  #               insider_trades += 1
-                
-  #   except:
-  #       pass
-    
-  #   response['insider_traders'] = insider_trades
-  #   return response
-
-  # except Exception as e:
-  #   return 'Server Error', 500
-
-
 # GET QUIVER DATA FOR TICKER
 # *****************************************************************************
 @app.route('/quiver-quant/<ticker>', methods=['GET'])

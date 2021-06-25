@@ -7,7 +7,7 @@ const BASE_URL = 'http://54.157.199.149:3002';
 // *****************************************************************************
 router.get('/premarket-gainers', async (req, res) => {
   try {
-    request('http://54.157.199.149:3002/premarket-gainers', (err, reqres) => {
+    request(BASE_URL + '/premarket-gainers', (err, reqres) => {
       if (err) return console.error(err.message);
 
       const parseRes = JSON.parse(reqres.body);
@@ -23,7 +23,7 @@ router.get('/premarket-gainers', async (req, res) => {
 // *****************************************************************************
 router.get('/premarket-losers', async (req, res) => {
   try {
-    request('http://54.157.199.149:3002/premarket-losers', (err, reqres) => {
+    request(BASE_URL + '/premarket-losers', (err, reqres) => {
       if (err) return console.error(err.message);
 
       const parseRes = JSON.parse(reqres.body);
@@ -39,7 +39,7 @@ router.get('/premarket-losers', async (req, res) => {
 // *****************************************************************************
 router.get('/most-active', async (req, res) => {
   try {
-    request('http://54.157.199.149:3002/most-active', (err, reqres) => {
+    request(BASE_URL + '/most-active', (err, reqres) => {
       if (err) return console.error(err.message);
 
       const parseRes = JSON.parse(reqres.body);
@@ -55,7 +55,7 @@ router.get('/most-active', async (req, res) => {
 // *****************************************************************************
 router.get('/insider-trading', async (req, res) => {
   try {
-    request('http://54.157.199.149:3002/insider-trading', (err, reqres) => {
+    request(BASE_URL + '/insider-trading', (err, reqres) => {
       if (err) return console.error(err.message);
 
       const parseRes = JSON.parse(reqres.body);
@@ -71,7 +71,7 @@ router.get('/insider-trading', async (req, res) => {
 // *****************************************************************************
 router.get('/short-interest', async (req, res) => {
   try {
-    request('http://54.157.199.149:3002/short-interest', (err, reqres) => {
+    request(BASE_URL + '/short-interest', (err, reqres) => {
       if (err) return console.error(err.message);
 
       const parseRes = JSON.parse(reqres.body);
