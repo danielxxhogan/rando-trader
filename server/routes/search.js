@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const fetch = require('node-fetch');
 
-const SENTIMENT_API_URL = 'http://localhost:5000';
+const SENTIMENT_API_URL = 'http://54.157.199.149:5000';
 const DATA_API_URL = 'http://54.157.199.149:3002'
 
 // *****************************************************************************

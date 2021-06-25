@@ -40,6 +40,7 @@ def test():
 # ********************************************************************************************************
 @app.route('/news/<ticker>', methods=['GET'])
 def get_news(ticker):
+    print('news route', ticker)
     SIGNIFICANT_DATA = 'description'
     results = {'articles_today': 0,
                'total_sentiment': 0.0,
