@@ -19,6 +19,7 @@ const Search = () => {
   // this react component at the top.
 
   const tradingViewSetup = () => {
+    console.log(ticker);
     new TradingView.widget(
       {
       "width": 1000,
@@ -108,6 +109,7 @@ const Search = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault()
+    tradingViewSetup();
 
     getNews()
     getArticles()
