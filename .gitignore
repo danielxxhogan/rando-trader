@@ -7,3 +7,4 @@ package-lock.json
 *.log
 credentials.json
 mrjbq7-ta-lib-95b4f80
+get-pip.py
