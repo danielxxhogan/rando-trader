@@ -4,7 +4,7 @@
   "description": "express api hosted on ec2 for querying sw db on rds",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "author": "Daniel Hogan",
   "license": "ISC",
