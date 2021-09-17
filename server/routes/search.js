@@ -4,7 +4,7 @@ const NewsAPI = require('newsapi');
 require('dotenv').config()
 
 const SENTIMENT_API_URL = 'http://localhost:5000';
-const DATA_API_URL = 'http://54.157.199.149:3002';
+const DATA_API_URL = 'http://localhost:3002';
 
 const newsapi = new NewsAPI(process.env.NEWS_API_KEY);
 

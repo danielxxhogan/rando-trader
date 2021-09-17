@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const request = require('request');
 
-const BASE_URL = 'http://54.157.199.149:3002';
+const BASE_URL = 'http://localhost:3002';
 
 
 // *****************************************************************************
